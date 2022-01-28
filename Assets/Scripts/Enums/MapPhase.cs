@@ -1,0 +1,5 @@
+﻿enum MapPhase
+{
+    Dark,
+    Light
+};
