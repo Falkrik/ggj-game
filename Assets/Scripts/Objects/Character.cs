@@ -10,23 +10,12 @@ public class Character : MonoBehaviour
     private Player player;
     private Rigidbody2D rb;
     private Collider2D coll;
+    private bool isJumping = false;
 
     public Rigidbody2D CharacterRigidBody { get => rb; }
     public Collider2D CharacterCollider { get => coll; }
-    public Player CharacterPlayer { get => player; }
-
-
-    public void MoveCharacter(Vector2 moveSpeed)
-    {
-        //Add animation controls here.
-        rb.AddForce(moveSpeed, ForceMode2D.Force);
-    }
-
-    public void Jump(Vector2 jumpForce)
-    {
-        rb.AddForce(jumpForce,  ForceMode2D.Impulse);
-        //Add animation and particle effects here.
-    }
+    public Player CharacterPlayer { get => player; set => player = value; }
+    public bool IsJumping { get => isJumping; set => isJumping = value; }
 
     public void UsePush()
     {
@@ -46,6 +35,42 @@ public class Character : MonoBehaviour
     public void ChangePlayerGrounding(bool isGrounded)
     {
         player.ChangePlayerGrounding(isGrounded);
+    }
+
+    private void FixedUpdate()
+    {
+        MoveCharacter();
+
+        if(isJumping)
+            Jump(player.JumpForce);
+    }
+
+    private void MoveCharacter()
+    {
+        Debug.Log(rb.velocity);
+        Debug.Log(player.SpeedLimit);
+
+        if (player.SpeedLimit != 0)
+        {
+            if(rb.velocity.magnitude > player.SpeedLimit || rb.velocity.magnitude < -player.SpeedLimit)
+                rb.velocity = Vector2.ClampMagnitude(rb.velocity, player.SpeedLimit);
+        }
+
+        //Add animation controls here.
+        if (player.MoveDirection == Vector2.zero || rb.velocity.x > player.SpeedLimit || rb.velocity.y > player.SpeedLimit)
+            rb.AddForce(-rb.velocity * player.DecelerationSpeed);
+        if (player.MoveDirection != Vector2.zero && rb.velocity.x < player.SpeedLimit && rb.velocity.y < player.SpeedLimit)
+            rb.AddForce(player.MoveDirection * player.AccelerationSpeed, ForceMode2D.Force);
+    }
+
+    private void Jump(float jumpForce)
+    {
+        Vector2 jump = new Vector2(rb.velocity.x, jumpForce);
+        //rb.AddForce(jump, ForceMode2D.Impulse);
+        rb.velocity = jump;
+        isJumping = false;
+
+        //Add animation and particle effects here.
     }
 
     #region Unity Methods

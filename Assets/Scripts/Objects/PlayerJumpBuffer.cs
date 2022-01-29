@@ -6,7 +6,7 @@ public class PlayerJumpBuffer : MonoBehaviour
 {
     [SerializeField] private Player player;
 
-    private void Start()
+    private void Awake()
     {
         if (player == null)
             player = GetComponentInParent<Player>();
