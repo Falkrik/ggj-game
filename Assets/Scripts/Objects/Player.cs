@@ -6,6 +6,7 @@ using UnityEngine;
 [Serializable]
 public class Player : MonoBehaviour
 {
+    [SerializeField] protected GameObject characterPrefab;
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpForce;
     [SerializeField] private float hitStunTime;
@@ -19,13 +20,13 @@ public class Player : MonoBehaviour
     private int currentJumpCount = 0;
     private bool isHitStun = false;
     protected ControlScheme controls;
-    protected GameObject characterPrefab;
     protected Character playerCharacter;
     protected Vector2 moveDir;
 
     public Vector2 MoveDirection { get => moveDir; }
     public int PlayerNumber { get => playerNumber; }
 
+    [ContextMenu("Spawn Character")]
     public void SpawnCharacter()
     {
         playerCharacter = Instantiate(characterPrefab, this.transform).GetComponent<Character>();
@@ -38,13 +39,16 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        GetInput();
-        CooldownTimer();
+        if(playerCharacter != null)
+        {
+            GetInput();
+            CooldownTimer();
+        }
     }
 
     private void CooldownTimer()
     {
-        throw new NotImplementedException();
+        return;
     }
 
     private void GetInput()
