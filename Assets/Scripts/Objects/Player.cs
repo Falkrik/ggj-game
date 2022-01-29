@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float airMoveAcceleration;
     [SerializeField] private float airMoveDeceleration;
     [SerializeField] private float jumpForce;
+    [SerializeField] private float runJumpModifier;
     [SerializeField] private float coyoteTime;
     [SerializeField] private float hitStunTime;
     [SerializeField] private float pushForce;
@@ -151,47 +152,45 @@ public class Player : MonoBehaviour
 
     private void Jump()
     {
-        if (currentJumpCount == maxJumpCount && !canQueueJump)
+        void DetermineJump()
+        {
+            if (moveDir != Vector2.zero)
+                playerCharacter.Jump(Vector2.up * runJumpModifier * jumpForce);
+            if (moveDir == Vector2.zero)
+                playerCharacter.Jump(Vector2.up * jumpForce);
+        }
+
+        if (currentJumpCount >= maxJumpCount && !canQueueJump)
             return;
 
         if(isGrounded)
         {
             currentJumpCount += 1;
-
-            if(moveDir != Vector2.zero)
-            {
-
-                playerCharacter.Jump(Vector2.up * 2 * jumpForce);
-            }
-
-            if (moveDir == Vector2.zero)
-            {
-                playerCharacter.Jump(Vector2.up * jumpForce);
-            }
-
+            
+            DetermineJump();
             return;
         }
 
         if (!isGrounded && canQueueJump)
         {
             jumpQueued = true;
+            canQueueJump = false;
             return;
         }
 
-        //if (!isGrounded && !canQueueJump && currentJumpCount < maxJumpCount)
-        //{            
-        //    if(canCoyoteJump)
-        //    {
-        //        currentJumpCount += 1;
-        //        playerCharacter.Jump(Vector2.up * jumpForce);
-        //        canCoyoteJump = false;
-                
-        //        return;
-        //    }
+        if (!isGrounded && !canQueueJump && currentJumpCount < maxJumpCount)
+        {
+            if (canCoyoteJump)
+            {
+                currentJumpCount += 1;
+                canCoyoteJump = false;
 
-        //    playerCharacter.Jump(Vector2.up * jumpForce);
-        //    currentJumpCount = maxJumpCount;
-        //}
+                DetermineJump();
+                return;
+            }
+            currentJumpCount = maxJumpCount;
+            DetermineJump();
+        }
     }
 
     private void MovePlayer()
@@ -255,7 +254,11 @@ public class Player : MonoBehaviour
         }
 
         if (jumpQueued && isGrounded)
+        {
+            jumpQueued = false;
             Jump();
+        }
+            
     }
 
     private void ResetJumpCount() => currentJumpCount = 0;
