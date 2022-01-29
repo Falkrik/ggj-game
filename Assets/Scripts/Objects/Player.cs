@@ -41,6 +41,7 @@ public class Player : MonoBehaviour
 
     public Vector2 SpawnPosition { get => spawnPosition; set => spawnPosition = value; }
     public int PlayerNumber { get => playerNumber; }
+    public bool CanQueueJump { get => canQueueJump; set => canQueueJump = value; }
 
 
     /// <summary>
@@ -54,8 +55,6 @@ public class Player : MonoBehaviour
         ResetJumpCount();
         moveDir = Vector2.zero;
     }
-
-    public void ResetJumpCount() => currentJumpCount = 0;
 
     public void Die()
     {
@@ -116,19 +115,16 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.W))
             Jump();
-        if (Input.GetKeyDown(KeyCode.A))
-            moveDir += Vector2.left;
-        if (Input.GetKeyDown(KeyCode.D))
-            moveDir += Vector2.right;
-        //if (Input.GetKeyDown(KeyCode.S))
-        //    return;
+            
+        if (Input.GetKey(KeyCode.A))
+            moveDir = Vector2.left;
+        if (Input.GetKey(KeyCode.D))
+            moveDir = Vector2.right;
 
         if (Input.GetKeyUp(KeyCode.A))
-            moveDir -= Vector2.left;
+            moveDir = Vector2.zero;
         if (Input.GetKeyUp(KeyCode.D))
-            moveDir -= Vector2.right;
-        //if (Input.GetKeyUp(KeyCode.S))
-        //    return;
+            moveDir = Vector2.zero;
 
         MovePlayer();
     }
@@ -137,20 +133,18 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.UpArrow))
             Jump();
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-            moveDir += Vector2.left;
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-            moveDir += Vector2.right;
-        //if (Input.GetKeyDown(KeyCode.DownArrow))
-        //    moveDir += Vector2.down;
+
+        if (Input.GetKey(KeyCode.LeftArrow))
+            moveDir = Vector2.left;
+        if (Input.GetKey(KeyCode.RightArrow))
+            moveDir = Vector2.right;
 
 
-        if (Input.GetKeyUp(KeyCode.LeftArrow))
-            moveDir -= Vector2.left;
-        if (Input.GetKeyUp(KeyCode.RightArrow))
-            moveDir -= Vector2.right;
-        //if (Input.GetKeyUp(KeyCode.DownArrow))
-        //    moveDir -= Vector2.down;
+
+        if (Input.GetKey(KeyCode.LeftArrow))
+            moveDir -= Vector2.zero;
+        if (Input.GetKey(KeyCode.RightArrow))
+            moveDir -= Vector2.zero;
 
         MovePlayer();
     }
@@ -164,7 +158,17 @@ public class Player : MonoBehaviour
         {
             currentJumpCount += 1;
 
-            playerCharacter.Jump(Vector2.up * jumpForce);
+            if(moveDir != Vector2.zero)
+            {
+
+                playerCharacter.Jump(Vector2.up * 2 * jumpForce);
+            }
+
+            if (moveDir == Vector2.zero)
+            {
+                playerCharacter.Jump(Vector2.up * jumpForce);
+            }
+
             return;
         }
 
@@ -208,7 +212,7 @@ public class Player : MonoBehaviour
         {
             if (isGrounded)
                 playerCharacter.MoveCharacter(-playerCharacter.CharacterRigidBody.velocity * groundMoveDeceleration);
-            if (!isGrounded)
+            if (!isGrounded && !Input.GetKey(KeyCode.W))
                 playerCharacter.MoveCharacter(-playerCharacter.CharacterRigidBody.velocity * airMoveDeceleration);
         }
     }
@@ -229,7 +233,6 @@ public class Player : MonoBehaviour
     public void ChangePlayerGrounding(bool newGrounding)
     {
         isGrounded = newGrounding;
-        Debug.Log("Current Grounding: " + isGrounded);
 
         if (!isGrounded)
         {
@@ -248,13 +251,15 @@ public class Player : MonoBehaviour
             speedLimit = groundSpeedMax;
             speedLimitDeceleration = groundMoveDeceleration;
 
-            currentJumpCount = 0;
+            ResetJumpCount();
         }
 
         if (jumpQueued && isGrounded)
             Jump();
     }
 
+    private void ResetJumpCount() => currentJumpCount = 0;
+    
     //public void HitStun()
     //{
 

@@ -24,7 +24,7 @@ public class Character : MonoBehaviour
 
     public void Jump(Vector2 jumpForce)
     {
-        rb.AddForce(jumpForce,  ForceMode2D.Force);
+        rb.AddForce(jumpForce,  ForceMode2D.Impulse);
         //Add animation and particle effects here.
     }
 
