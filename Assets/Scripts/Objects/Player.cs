@@ -49,8 +49,11 @@ public class Player : MonoBehaviour
     public void SpawnCharacter(Vector2 spawnPos)
     {
         SpawnPosition = spawnPos;
-        playerCharacter = Instantiate(characterPrefab, this.transform).GetComponent<Character>();
         transform.position = SpawnPosition;
+
+        playerCharacter = Instantiate(characterPrefab, this.transform).GetComponent<Character>();
+        playerCharacter.CharacterPlayer = this;
+
         ResetJumpCount();
         moveDir = Vector2.zero;
     }
