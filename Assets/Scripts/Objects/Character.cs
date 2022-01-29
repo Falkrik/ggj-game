@@ -6,7 +6,6 @@ using UnityEngine;
 [Serializable]
 public class Character : MonoBehaviour
 {
-    private float rbVelocityLimit;
     private int playerNumber;
     private Player player;
     private Rigidbody2D rb;
@@ -14,14 +13,8 @@ public class Character : MonoBehaviour
 
     public Rigidbody2D CharacterRigidBody { get => rb; }
     public Collider2D CharacterCollider { get => coll; }
-
     public Player CharacterPlayer { get => player; }
 
-    public Character(Player characterPlayer)
-    {
-        player = characterPlayer;
-        playerNumber = player.PlayerNumber;
-    }
 
     public void MoveCharacter(Vector2 moveSpeed)
     {
@@ -31,11 +24,9 @@ public class Character : MonoBehaviour
 
     public void Jump(Vector2 jumpForce)
     {
-        rb.AddForce(jumpForce, ForceMode2D.Impulse);
+        rb.AddForce(jumpForce,  ForceMode2D.Force);
         //Add animation and particle effects here.
     }
-
-    public void ResetJumpCount() => player.ResetJumpCount();
 
     public void UsePush()
     {
@@ -52,10 +43,18 @@ public class Character : MonoBehaviour
         //Complete after.
     }
 
+    public void ChangePlayerGrounding(bool isGrounded)
+    {
+        player.ChangePlayerGrounding(isGrounded);
+    }
+
     #region Unity Methods
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        //This collider may need to be replaced with the specific collider type.
+        coll = GetComponent<Collider2D>();
+        player = GetComponentInParent<Player>();
     }
     #endregion
 }
