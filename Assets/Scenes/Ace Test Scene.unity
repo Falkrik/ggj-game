@@ -378,55 +378,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
-    - target: {fileID: 3412239300823856222, guid: ae0ac409f880251499a5b19379f3032d,
-        type: 3}
-      propertyPath: playerPrefabList.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3412239300823856222, guid: ae0ac409f880251499a5b19379f3032d,
-        type: 3}
-      propertyPath: playerSpawnPositions.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3412239300823856222, guid: ae0ac409f880251499a5b19379f3032d,
-        type: 3}
-      propertyPath: mapPrefab
-      value: 
-      objectReference: {fileID: 3389702232238645503, guid: 704b34a1e942f3a45a96dd639c7b7bb3,
-        type: 3}
-    - target: {fileID: 3412239300823856222, guid: ae0ac409f880251499a5b19379f3032d,
-        type: 3}
-      propertyPath: playerPrefabList.Array.data[0]
-      value: 
-      objectReference: {fileID: 5429017740406470064, guid: 12d3ffa793a4bcb49ae8ad85a4f68fc1,
-        type: 3}
-    - target: {fileID: 3412239300823856222, guid: ae0ac409f880251499a5b19379f3032d,
-        type: 3}
-      propertyPath: playerPrefabList.Array.data[1]
-      value: 
-      objectReference: {fileID: 5429017740406470064, guid: 11c6e51eee1490340b4b8ae9725b5841,
-        type: 3}
-    - target: {fileID: 3412239300823856222, guid: ae0ac409f880251499a5b19379f3032d,
-        type: 3}
-      propertyPath: playerSpawnPositions.Array.data[0].y
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 3412239300823856222, guid: ae0ac409f880251499a5b19379f3032d,
-        type: 3}
-      propertyPath: playerSpawnPositions.Array.data[1].x
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 3412239300823856222, guid: ae0ac409f880251499a5b19379f3032d,
-        type: 3}
-      propertyPath: playerPrefab
-      value: 
-      objectReference: {fileID: 5429017740406470064, guid: 12d3ffa793a4bcb49ae8ad85a4f68fc1,
-        type: 3}
-    - target: {fileID: 3412239300823856222, guid: ae0ac409f880251499a5b19379f3032d,
-        type: 3}
-      propertyPath: playerSpawnPositions.Array.data[1].y
-      value: -3
-      objectReference: {fileID: 0}
     - target: {fileID: 6565520430614586441, guid: ae0ac409f880251499a5b19379f3032d,
         type: 3}
       propertyPath: m_LocalPosition.x

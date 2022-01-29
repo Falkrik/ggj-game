@@ -47,13 +47,13 @@ MonoBehaviour:
     type: 3}
   controls: 0
   spawnPosition: {x: 0, y: 0}
-  groundSpeedMax: 0
-  groundMoveAcceleration: 0
-  groundMoveDeceleration: 0
-  airMoveSpeedMax: 0
-  airMoveAcceleration: 0
-  airMoveDeceleration: 0
-  jumpForce: 1
+  groundSpeedMax: 5
+  groundMoveAcceleration: 10
+  groundMoveDeceleration: 5
+  airMoveSpeedMax: 1
+  airMoveAcceleration: 10
+  airMoveDeceleration: 1
+  jumpForce: 13
   runJumpModifier: 0
   coyoteTime: 0
   hitStunTime: 0
