@@ -8,9 +8,14 @@ public class MenuManager : MonoBehaviour
 
     [Header("Menu Customization")]
     public Color selectedColor;
+    [Space]
+    public Color[] playerColors;
+
 
     [Header("Tools")]
     public GameObject[] buttonList;
+    public Image[] playerIcons;
+    private int[] playerColorIndex = { 0, 0 };
     private int selectedIndex = 0;
 
 
@@ -32,7 +37,18 @@ public class MenuManager : MonoBehaviour
             SelectButton(1);
         }
 
-        if(Input.GetKeyUp(KeyCode.Space))
+        if (Input.GetKeyUp(KeyCode.A))
+            ChangePlayerColorCCW(0);
+        if (Input.GetKeyUp(KeyCode.D))
+            ChangePlayerColorCW(0);
+
+        if (Input.GetKeyUp(KeyCode.LeftArrow))
+            ChangePlayerColorCCW(1);
+        if (Input.GetKeyUp(KeyCode.RightArrow))
+            ChangePlayerColorCW(1);
+
+
+        if (Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.Return))
         {
             TriggerButton();
         }    
@@ -42,12 +58,10 @@ public class MenuManager : MonoBehaviour
     private void SelectButton(int dir)
     {
         buttonList[selectedIndex].GetComponent<Text>().color = Color.white;
-        buttonList[selectedIndex].GetComponent<Text>().fontStyle = FontStyle.Normal;
 
         selectedIndex = (selectedIndex + dir < 0 ? 2 : selectedIndex + dir) % 3;
 
         buttonList[selectedIndex].GetComponent<Text>().color = selectedColor;
-        buttonList[selectedIndex].GetComponent<Text>().fontStyle = FontStyle.Bold;
     }
 
     public void StartGame()
@@ -86,5 +100,23 @@ public class MenuManager : MonoBehaviour
                 QuitGame();
                 break;
         }    
+    }
+
+    public void ChangePlayerColorCCW(int playerID)
+    {
+        int index = playerColorIndex[playerID];
+        index = index - 1 < 0 ? playerColors.Length - 1 : index - 1;
+        playerColorIndex[playerID] = index;
+
+        playerIcons[playerID].color = playerColors[index];
+    }
+
+    public void ChangePlayerColorCW(int playerID)
+    {
+        int index = playerColorIndex[playerID];
+        index = (index + 1) % playerColors.Length;
+        playerColorIndex[playerID] = index;
+
+        playerIcons[playerID].color = playerColors[index];
     }
 }
