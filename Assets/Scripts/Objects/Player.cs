@@ -232,9 +232,4 @@ public class Player : MonoBehaviour
     }
 
     private void ResetJumpCount() => currentJumpCount = 0;
-
-    //public void HitStun()
-    //{
-
-    //}
 }
