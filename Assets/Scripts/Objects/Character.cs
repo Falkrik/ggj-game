@@ -23,10 +23,10 @@ public class Character : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    public void MoveCharacter(Vector2 moveDir)
+    public void Move(Vector2 moveSpeed)
     {
         //Add animation controls here.
-        rb.AddForce(moveDir * moveSpeed, ForceMode2D.Force);
+        rb.AddForce(moveSpeed, ForceMode2D.Force);
     }
 
     public void Jump(Vector2 jumpForce)
@@ -35,7 +35,7 @@ public class Character : MonoBehaviour
         //Add animation and particle effects here.
     }
 
-    public void ResetJumpCount() => currentJumpCount = 0;
+    public void ResetJumpCount() => player.ResetJumpCount();
 
     public void UsePush()
     {
@@ -47,5 +47,8 @@ public class Character : MonoBehaviour
         //Complete after.
     }
 
-    public void 
+    public void Die()
+    {
+        //Complete after.
+    }
 }
