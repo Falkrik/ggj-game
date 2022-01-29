@@ -29,12 +29,22 @@ public class Player : MonoBehaviour
     public void SpawnCharacter()
     {
         playerCharacter = Instantiate(characterPrefab, this.transform).GetComponent<Character>();
+        ResetJumpCount();
         moveDir = Vector2.zero;
     }
+
+    public void ResetJumpCount() => currentJumpCount = 0;
+
 
     private void Update()
     {
         GetInput();
+        CooldownTimer();
+    }
+
+    private void CooldownTimer()
+    {
+        throw new NotImplementedException();
     }
 
     private void GetInput()
@@ -66,7 +76,7 @@ public class Player : MonoBehaviour
         //if (Input.GetKeyUp(KeyCode.S))
         //    return;
 
-        playerCharacter.MoveCharacter(moveDir);
+        Move();
     }
 
     private void ListenARROWInput()
@@ -90,7 +100,7 @@ public class Player : MonoBehaviour
         //if (Input.GetKeyUp(KeyCode.DownArrow))
         //    moveDir -= Vector2.down;
 
-        playerCharacter.MoveCharacter(moveDir);
+        Move();
     }
 
     private void Jump()
@@ -101,5 +111,30 @@ public class Player : MonoBehaviour
         currentJumpCount += 1;
 
         playerCharacter.Jump(Vector2.up * jumpForce);
+    }
+
+    private void Move()
+    {
+        playerCharacter.Move(moveDir * moveSpeed);
+    }
+
+    private void UsePush()
+    {
+        //Complete after.
+    }
+
+    public void UseDuality()
+    {
+        //Complete after.
+    }
+
+    public void Die()
+    {
+        //Complete after.
+    }
+
+    public void HitStun()
+    {
+        //Complete after.
     }
 }
