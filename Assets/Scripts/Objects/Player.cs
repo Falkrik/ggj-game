@@ -7,6 +7,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] protected GameObject characterPrefab;
+    [SerializeField] protected Vector2 spawnPosition;
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpForce;
     [SerializeField] private float hitStunTime;
@@ -23,13 +24,20 @@ public class Player : MonoBehaviour
     protected Character playerCharacter;
     protected Vector2 moveDir;
 
+    public Vector2 SpawnPosition { get => spawnPosition; set => spawnPosition = value; }
     public Vector2 MoveDirection { get => moveDir; }
     public int PlayerNumber { get => playerNumber; }
 
+
+
+    /// <summary>
+    /// Instatiates prefab of the character 
+    /// </summary>
     [ContextMenu("Spawn Character")]
     public void SpawnCharacter()
     {
         playerCharacter = Instantiate(characterPrefab, this.transform).GetComponent<Character>();
+        transform.position = SpawnPosition;
         ResetJumpCount();
         moveDir = Vector2.zero;
     }
