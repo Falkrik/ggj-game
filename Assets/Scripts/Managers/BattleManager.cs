@@ -7,7 +7,8 @@ public class BattleManager : MonoBehaviour
 {
 
     [SerializeField] private GameObject mapPrefab;
-    [SerializeField] private List<Player> playerPrefabList;
+    [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private List<GameObject> playerList;
     [SerializeField] private List<Vector2> playerSpawnPositions;
 
     private GameObject map;
@@ -21,10 +22,9 @@ public class BattleManager : MonoBehaviour
     private MapPhase mapPhase;
     private GameMode gameMode;
 
-    private List<Player> currentPlayerList;
+    private List<Player> currentPlayerList = new List<Player>();
     private List<int> playerStocks;
     private List<int> playerDuality;
-    private List<Vector2> playerSpawnPos;
 
     public bool MatchStarted { get => matchStarted; set => matchStarted = value; }
     public bool MatchPaused { get => matchPaused; set => matchPaused = value; }
@@ -34,9 +34,11 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     public void InitBattleManager()
     {
-        playerCount = GameManager.gameManager.PlayerCount;
-        maxMatchTime = GameManager.gameManager.MaxMatchTime;
-        
+        playerCount = GameManager.Instance.PlayerCount;
+        maxMatchTime = GameManager.Instance.MaxMatchTime;
+        currentTime = maxMatchTime;
+        currentPlayerList = new List<Player>();
+
         SpawnMap();
         SpawnPlayers();
     }
@@ -79,12 +81,12 @@ public class BattleManager : MonoBehaviour
 
     private void SpawnPlayers()
     {
-        currentPlayerList = new List<Player>();
-
         for(int i = 0; i < playerCount; i++)
         {
-            currentPlayerList.Add(playerPrefabList[i]);
-            currentPlayerList[i].SpawnCharacter();
+            GameObject newPlayer = Instantiate(playerPrefab, this.transform);
+
+            currentPlayerList.Add(newPlayer.GetComponent<Player>());
+            currentPlayerList[i].SpawnCharacter(playerSpawnPositions[i]);
         }
     }
 

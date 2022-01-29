@@ -25,10 +25,10 @@ public class Player : MonoBehaviour
 
     private int playerNumber;
     private int maxJumpCount = 2;
-    [SerializeField] private int currentJumpCount = 0;
+    private int currentJumpCount = 0;
     private bool isHitStun = false;
     private Character playerCharacter;
-    [SerializeField] private Vector2 moveDir;
+    private Vector2 moveDir;
     private float speedLimit;
     private float speedLimitDeceleration;
 
@@ -36,6 +36,7 @@ public class Player : MonoBehaviour
     private bool jumpQueued = false;
     private bool canCoyoteJump = false;
     private bool isGrounded = false;
+    private bool isJumping = false;
     private float coyoteTimeStart;
     private float hitStunTimeStart;
     private float pushCooldownStart;
@@ -44,13 +45,10 @@ public class Player : MonoBehaviour
     public int PlayerNumber { get => playerNumber; }
     public bool CanQueueJump { get => canQueueJump; set => canQueueJump = value; }
 
-
-    /// <summary>
-    /// Instatiates prefab of the character 
-    /// </summary>
-    [ContextMenu("Spawn Character")]
-    public void SpawnCharacter()
+    [ContextMenu("Spawn")]
+    public void SpawnCharacter(Vector2 spawnPos)
     {
+        SpawnPosition = spawnPos;
         playerCharacter = Instantiate(characterPrefab, this.transform).GetComponent<Character>();
         transform.position = SpawnPosition;
         ResetJumpCount();
@@ -97,7 +95,8 @@ public class Player : MonoBehaviour
 
     private void SpeedLimitCheck()
     {
-        if (Mathf.Abs(playerCharacter.CharacterRigidBody.velocity.magnitude) <= speedLimit)
+        Vector2 velocity = new Vector2(playerCharacter.CharacterRigidBody.velocity.x, 0);
+        if (Mathf.Abs(velocity.magnitude) <= speedLimit)
             return;
 
         playerCharacter.CharacterRigidBody.velocity = Vector2.ClampMagnitude(playerCharacter.CharacterRigidBody.velocity, speedLimit);
@@ -152,6 +151,7 @@ public class Player : MonoBehaviour
 
     private void Jump()
     {
+        #region DetermineJump
         void DetermineJump()
         {
             if (moveDir != Vector2.zero)
@@ -159,11 +159,14 @@ public class Player : MonoBehaviour
             if (moveDir == Vector2.zero)
                 playerCharacter.Jump(Vector2.up * jumpForce);
         }
+        #endregion
 
         if (currentJumpCount >= maxJumpCount && !canQueueJump)
             return;
 
-        if(isGrounded)
+        isJumping = true;
+
+        if (isGrounded)
         {
             currentJumpCount += 1;
             
@@ -203,15 +206,17 @@ public class Player : MonoBehaviour
                 playerCharacter.MoveCharacter(moveDir * airMoveAcceleration);
             return;
         }
+
         if (moveDir != Vector2.zero && playerCharacter.CharacterRigidBody.velocity.magnitude >= speedLimit)
         {
             return;
         }
+
         else
         {
             if (isGrounded)
                 playerCharacter.MoveCharacter(-playerCharacter.CharacterRigidBody.velocity * groundMoveDeceleration);
-            if (!isGrounded && !Input.GetKey(KeyCode.W))
+            if (!isGrounded && isJumping)
                 playerCharacter.MoveCharacter(-playerCharacter.CharacterRigidBody.velocity * airMoveDeceleration);
         }
     }
@@ -249,6 +254,7 @@ public class Player : MonoBehaviour
         {
             speedLimit = groundSpeedMax;
             speedLimitDeceleration = groundMoveDeceleration;
+            isJumping = false;
 
             ResetJumpCount();
         }
