@@ -6,6 +6,8 @@ using UnityEngine;
 [Serializable]
 public class Player : MonoBehaviour
 {
+    [SerializeField] private Vector2 moveDir;
+
     [SerializeField] private GameObject characterPrefab;
     [SerializeField] private ControlScheme controls;
     [SerializeField] private Vector2 spawnPosition;
@@ -16,7 +18,6 @@ public class Player : MonoBehaviour
     [SerializeField] private float airMoveAcceleration;
     [SerializeField] private float airMoveDeceleration;
     [SerializeField] private float jumpForce;
-    [SerializeField] private float runJumpModifier;
     [SerializeField] private float coyoteTime;
     [SerializeField] private float hitStunTime;
     [SerializeField] private float pushForce;
@@ -25,12 +26,12 @@ public class Player : MonoBehaviour
 
     private int playerNumber;
     private int maxJumpCount = 2;
-    [SerializeField] private int currentJumpCount = 0;
+    private int currentJumpCount = 0;
     private bool isHitStun = false;
     private Character playerCharacter;
-    [SerializeField] private Vector2 moveDir;
     private float speedLimit;
-    private float speedLimitDeceleration;
+    private float speedAcceleration;
+    private float speedDeceleration;
 
     private bool canQueueJump = false;
     private bool jumpQueued = false;
@@ -43,16 +44,27 @@ public class Player : MonoBehaviour
     public Vector2 SpawnPosition { get => spawnPosition; set => spawnPosition = value; }
     public int PlayerNumber { get => playerNumber; }
     public bool CanQueueJump { get => canQueueJump; set => canQueueJump = value; }
+    public Vector2 MoveDirection { get => moveDir; }
+    public float GroundSpeedMax { get => groundSpeedMax; }
+    public float GroundMoveAcceleration { get => GroundMoveAcceleration; }
+    public float GroundMoveDeceleration { get => groundMoveDeceleration; }
+    public float AirMoveSpeedMax { get => airMoveSpeedMax; }
+    public float AirMoveAcceleration { get => airMoveAcceleration; }
+    public float AirMoveDeceleration { get => AirMoveDeceleration; }
+    public float JumpForce { get => jumpForce; }
+    public float SpeedLimit { get => speedLimit; }
+    public float AccelerationSpeed { get => speedAcceleration; }
+    public float DecelerationSpeed { get => speedDeceleration; }
 
-
-    /// <summary>
-    /// Instatiates prefab of the character 
-    /// </summary>
-    [ContextMenu("Spawn Character")]
-    public void SpawnCharacter()
+    [ContextMenu("Spawn")]
+    public void SpawnCharacter(Vector2 spawnPos)
     {
-        playerCharacter = Instantiate(characterPrefab, this.transform).GetComponent<Character>();
+        SpawnPosition = spawnPos;
         transform.position = SpawnPosition;
+
+        playerCharacter = Instantiate(characterPrefab, this.transform).GetComponent<Character>();
+        playerCharacter.CharacterPlayer = this;
+
         ResetJumpCount();
         moveDir = Vector2.zero;
     }
@@ -69,12 +81,11 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if(playerCharacter != null)
+        if (playerCharacter != null)
         {
-            if(!isHitStun)
+            if (!isHitStun)
                 GetInput();
 
-            SpeedLimitCheck();
             TimerChecks();
         }
     }
@@ -95,17 +106,9 @@ public class Player : MonoBehaviour
             canCoyoteJump = false;
     }
 
-    private void SpeedLimitCheck()
-    {
-        if (Mathf.Abs(playerCharacter.CharacterRigidBody.velocity.magnitude) <= speedLimit)
-            return;
-
-        playerCharacter.CharacterRigidBody.velocity = Vector2.ClampMagnitude(playerCharacter.CharacterRigidBody.velocity, speedLimit);
-    }
-
     private void GetInput()
     {
-        if(controls == ControlScheme.WASD)
+        if (controls == ControlScheme.WASD)
             ListenWASDInput();
 
         if (controls == ControlScheme.Arrows)
@@ -116,18 +119,16 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.W))
             Jump();
-            
-        if (Input.GetKey(KeyCode.A))
+
+        if (Input.GetKeyDown(KeyCode.A))
             moveDir = Vector2.left;
-        if (Input.GetKey(KeyCode.D))
+        if (Input.GetKeyDown(KeyCode.D))
             moveDir = Vector2.right;
 
         if (Input.GetKeyUp(KeyCode.A))
             moveDir = Vector2.zero;
         if (Input.GetKeyUp(KeyCode.D))
             moveDir = Vector2.zero;
-
-        MovePlayer();
     }
 
     private void ListenARROWInput()
@@ -135,39 +136,28 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.UpArrow))
             Jump();
 
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
             moveDir = Vector2.left;
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKeyDown(KeyCode.RightArrow))
             moveDir = Vector2.right;
 
 
-
-        if (Input.GetKey(KeyCode.LeftArrow))
-            moveDir -= Vector2.zero;
-        if (Input.GetKey(KeyCode.RightArrow))
-            moveDir -= Vector2.zero;
-
-        MovePlayer();
+        if (Input.GetKeyUp(KeyCode.LeftArrow))
+            moveDir = Vector2.zero;
+        if (Input.GetKeyUp(KeyCode.RightArrow))
+            moveDir = Vector2.zero;
     }
 
     private void Jump()
     {
-        void DetermineJump()
-        {
-            if (moveDir != Vector2.zero)
-                playerCharacter.Jump(Vector2.up * runJumpModifier * jumpForce);
-            if (moveDir == Vector2.zero)
-                playerCharacter.Jump(Vector2.up * jumpForce);
-        }
-
         if (currentJumpCount >= maxJumpCount && !canQueueJump)
             return;
 
-        if(isGrounded)
+        if (isGrounded)
         {
             currentJumpCount += 1;
-            
-            DetermineJump();
+
+            playerCharacter.IsJumping = true;
             return;
         }
 
@@ -185,34 +175,12 @@ public class Player : MonoBehaviour
                 currentJumpCount += 1;
                 canCoyoteJump = false;
 
-                DetermineJump();
+                playerCharacter.IsJumping = true;
                 return;
             }
-            currentJumpCount = maxJumpCount;
-            DetermineJump();
-        }
-    }
 
-    private void MovePlayer()
-    {
-        if(moveDir != Vector2.zero && playerCharacter.CharacterRigidBody.velocity.magnitude < speedLimit)
-        {
-            if (isGrounded)
-                playerCharacter.MoveCharacter(moveDir * groundMoveAcceleration);
-            else
-                playerCharacter.MoveCharacter(moveDir * airMoveAcceleration);
-            return;
-        }
-        if (moveDir != Vector2.zero && playerCharacter.CharacterRigidBody.velocity.magnitude >= speedLimit)
-        {
-            return;
-        }
-        else
-        {
-            if (isGrounded)
-                playerCharacter.MoveCharacter(-playerCharacter.CharacterRigidBody.velocity * groundMoveDeceleration);
-            if (!isGrounded && !Input.GetKey(KeyCode.W))
-                playerCharacter.MoveCharacter(-playerCharacter.CharacterRigidBody.velocity * airMoveDeceleration);
+            currentJumpCount = maxJumpCount;
+            playerCharacter.IsJumping = true;
         }
     }
 
@@ -236,19 +204,21 @@ public class Player : MonoBehaviour
         if (!isGrounded)
         {
             speedLimit = airMoveSpeedMax;
-            speedLimitDeceleration = airMoveDeceleration;
+            speedDeceleration = airMoveDeceleration;
+            speedAcceleration = airMoveAcceleration;
 
-            if(currentJumpCount == 0)
+            if (currentJumpCount == 0)
             {
                 coyoteTimeStart = Time.timeSinceLevelLoad;
                 canCoyoteJump = true;
             }
         }
-        
-        if(isGrounded)
+
+        if (isGrounded)
         {
             speedLimit = groundSpeedMax;
-            speedLimitDeceleration = groundMoveDeceleration;
+            speedDeceleration = groundMoveDeceleration;
+            speedAcceleration = groundMoveAcceleration;
 
             ResetJumpCount();
         }
@@ -258,13 +228,8 @@ public class Player : MonoBehaviour
             jumpQueued = false;
             Jump();
         }
-            
+
     }
 
     private void ResetJumpCount() => currentJumpCount = 0;
-    
-    //public void HitStun()
-    //{
-
-    //}
 }

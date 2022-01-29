@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4045971342838139718}
   - component: {fileID: 256980600754817673}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43,10 +43,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b46b7580b84a6a4468b22f7413ad5321, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 1
-  jumpForce: 1
+  moveDir: {x: 0, y: 0}
+  characterPrefab: {fileID: 1775803238137433946, guid: 98bb76e9485e2b64c95a8ba8d17b3db5,
+    type: 3}
+  controls: 0
+  spawnPosition: {x: 0, y: 0}
+  groundSpeedMax: 5
+  groundMoveAcceleration: 10
+  groundMoveDeceleration: 5
+  airMoveSpeedMax: 1
+  airMoveAcceleration: 10
+  airMoveDeceleration: 1
+  jumpForce: 7
+  coyoteTime: 0
   hitStunTime: 0
-  hitStunMovementFalloff: 0
   pushForce: 0
   pushDuration: 0
   pushCooldown: 0

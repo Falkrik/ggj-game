@@ -11,23 +11,29 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int playerStockCount;
     [SerializeField] private float maxMatchTime;
 
-    public static GameManager gameManager;
+    public static GameManager Instance;
     
+    public BattleManager BattleManager { get => battleManager; }
     public int PlayerCount { get => playerCount; }
     public int PlayerStockCount { get => playerStockCount; }
     public float MaxMatchTime { get => maxMatchTime; }
 
-    public void Start()
+    private void Awake()
+    {
+        if (Instance != null)
+            Destroy(this);
+        Instance = this;
+    }
+    private void Start()
     {
         InitGameManager();
+        BattleManager.InitBattleManager();
     }
 
     private void InitGameManager()
     {
         if (battleManager == null)
             throw new NotImplementedException("BattleManager object was not added to the GameManager.");
-
-
     }
 
     public void RefreshBattleManager()
