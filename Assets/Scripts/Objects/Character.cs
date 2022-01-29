@@ -13,7 +13,7 @@ public class Character : MonoBehaviour
 
     public Rigidbody2D CharacterRigidBody { get => rb; }
     public Collider2D CharacterCollider { get => coll; }
-    public Player CharacterPlayer { get => player; }
+    public Player CharacterPlayer { get => player; set => player = value; }
 
 
     public void MoveCharacter(Vector2 moveSpeed)
