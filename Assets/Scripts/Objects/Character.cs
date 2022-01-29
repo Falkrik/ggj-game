@@ -6,9 +6,14 @@ using UnityEngine;
 [Serializable]
 public class Character : MonoBehaviour
 {
-    protected int playerNumber;
-    protected Player player;
-    protected Rigidbody2D rb;
+    private float rbVelocityLimit;
+    private int playerNumber;
+    private Player player;
+    private Rigidbody2D rb;
+    private Collider2D coll;
+
+    public Rigidbody2D CharacterRigidBody { get => rb; }
+    public Collider2D CharacterCollider { get => coll; }
 
     public Player CharacterPlayer { get => player; }
 
@@ -18,12 +23,7 @@ public class Character : MonoBehaviour
         playerNumber = player.PlayerNumber;
     }
 
-    private void Start()
-    {
-        rb = GetComponent<Rigidbody2D>();
-    }
-
-    public void Move(Vector2 moveSpeed)
+    public void MoveCharacter(Vector2 moveSpeed)
     {
         //Add animation controls here.
         rb.AddForce(moveSpeed, ForceMode2D.Force);
@@ -51,4 +51,11 @@ public class Character : MonoBehaviour
     {
         //Complete after.
     }
+
+    #region Unity Methods
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+    #endregion
 }

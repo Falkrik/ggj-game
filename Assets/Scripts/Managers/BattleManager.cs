@@ -63,6 +63,11 @@ public class BattleManager : MonoBehaviour
         return;
     }
 
+    private void Update()
+    {
+        TimerCountdown();
+    }
+
     // Checks for and destroys the old map, instantiates a new one.
     private void SpawnMap()
     {
@@ -101,10 +106,5 @@ public class BattleManager : MonoBehaviour
     private void EndMatch()
     {
         //Here we need to build the player win/loss condition and add the UI representation.
-    }
-
-    private void Update()
-    {
-        TimerCountdown();
     }
 }
