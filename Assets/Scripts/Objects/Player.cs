@@ -6,12 +6,18 @@ using UnityEngine;
 [Serializable]
 public class Player : MonoBehaviour
 {
-    [SerializeField] protected GameObject characterPrefab;
-    [SerializeField] protected Vector2 spawnPosition;
-    [SerializeField] private float moveSpeed;
+    [SerializeField] private GameObject characterPrefab;
+    [SerializeField] private ControlScheme controls;
+    [SerializeField] private Vector2 spawnPosition;
+    [SerializeField] private float groundSpeedMax;
+    [SerializeField] private float groundMoveAcceleration;
+    [SerializeField] private float groundMoveDeceleration;
+    [SerializeField] private float airMoveSpeedMax;
+    [SerializeField] private float airMoveAcceleration;
+    [SerializeField] private float airMoveDeceleration;
     [SerializeField] private float jumpForce;
+    [SerializeField] private float coyoteTime;
     [SerializeField] private float hitStunTime;
-    [SerializeField] private float hitStunMovementFalloff;
     [SerializeField] private float pushForce;
     [SerializeField] private float pushDuration;
     [SerializeField] private float pushCooldown;
@@ -20,14 +26,21 @@ public class Player : MonoBehaviour
     private int maxJumpCount = 2;
     private int currentJumpCount = 0;
     private bool isHitStun = false;
-    protected ControlScheme controls;
-    protected Character playerCharacter;
-    protected Vector2 moveDir;
+    private Character playerCharacter;
+    private Vector2 moveDir;
+    private float speedLimit;
+    private float speedLimitDeceleration;
+
+    private bool canQueueJump = false;
+    private bool jumpQueued = false;
+    private bool canCoyoteJump = false;
+    private bool isGrounded = false;
+    private float coyoteTimeStart;
+    private float hitStunTimeStart;
+    private float pushCooldownStart;
 
     public Vector2 SpawnPosition { get => spawnPosition; set => spawnPosition = value; }
-    public Vector2 MoveDirection { get => moveDir; }
     public int PlayerNumber { get => playerNumber; }
-
 
 
     /// <summary>
@@ -44,19 +57,50 @@ public class Player : MonoBehaviour
 
     public void ResetJumpCount() => currentJumpCount = 0;
 
+    public void Die()
+    {
+        //Complete after.
+    }
+
+    public void HitStun()
+    {
+        //Complete after.
+    }
 
     private void Update()
     {
         if(playerCharacter != null)
         {
-            GetInput();
-            CooldownTimer();
+            if(!isHitStun)
+                GetInput();
+            
+            TimerChecks();
+            SpeedLimitChecks();
         }
     }
 
-    private void CooldownTimer()
+    private void TimerChecks()
     {
+        CheckCoyoteTime();
+        //CheckPushCooldown();
+        //CheckHitStunRecovery();
         return;
+    }
+
+    private void CheckCoyoteTime()
+    {
+        if (!canCoyoteJump)
+            return;
+        if ((Time.timeSinceLevelLoad - coyoteTimeStart) > coyoteTime)
+            canCoyoteJump = false;
+    }
+
+    private void SpeedLimitChecks()
+    {
+        if (Mathf.Abs(playerCharacter.CharacterRigidBody.velocity.x) <= speedLimit)
+            return;
+
+        playerCharacter.CharacterRigidBody.velocity -= playerCharacter.CharacterRigidBody.velocity * speedLimitDeceleration;
     }
 
     private void GetInput()
@@ -88,7 +132,7 @@ public class Player : MonoBehaviour
         //if (Input.GetKeyUp(KeyCode.S))
         //    return;
 
-        Move();
+        MovePlayer();
     }
 
     private void ListenARROWInput()
@@ -112,22 +156,50 @@ public class Player : MonoBehaviour
         //if (Input.GetKeyUp(KeyCode.DownArrow))
         //    moveDir -= Vector2.down;
 
-        Move();
+        MovePlayer();
     }
 
     private void Jump()
     {
-        if (currentJumpCount == maxJumpCount)
+        if (currentJumpCount == maxJumpCount && !canQueueJump)
             return;
 
-        currentJumpCount += 1;
+        if(isGrounded)
+        {
+            currentJumpCount += 1;
 
-        playerCharacter.Jump(Vector2.up * jumpForce);
+            playerCharacter.Jump(Vector2.up * jumpForce);
+            return;
+        }
+
+        if (!isGrounded && canQueueJump)
+        {
+            jumpQueued = true;
+            return;
+        }
+
+        if (!isGrounded && !canQueueJump && currentJumpCount < maxJumpCount)
+        {            
+            if(canCoyoteJump)
+            {
+                currentJumpCount += 1;
+                playerCharacter.Jump(Vector2.up * jumpForce);
+                canCoyoteJump = false;
+                
+                return;
+            }
+
+            playerCharacter.Jump(Vector2.up * jumpForce);
+            currentJumpCount = maxJumpCount;
+        }
     }
 
-    private void Move()
+    private void MovePlayer()
     {
-        playerCharacter.Move(moveDir * moveSpeed);
+        if (isGrounded)
+            playerCharacter.MoveCharacter(moveDir * groundMoveAcceleration);
+        else
+            playerCharacter.MoveCharacter(moveDir * airMoveAcceleration);
     }
 
     private void UsePush()
@@ -135,18 +207,42 @@ public class Player : MonoBehaviour
         //Complete after.
     }
 
-    public void UseDuality()
+    private void UseDuality()
     {
         //Complete after.
     }
 
-    public void Die()
+    //Changes grounding status. If the player is not grounded, we set the player's movement stats 
+    //to reflect air movespeed. We also check if the player has jumped. If they have not jumped 
+    //and they are not grounded, it means the platform disappeared, and so we start our coyoteTime.
+    public void ChangePlayerGrounding(bool newGrounding)
     {
-        //Complete after.
+        isGrounded = newGrounding;
+
+        if (!isGrounded)
+        {
+            speedLimit = airMoveSpeedMax;
+            speedLimitDeceleration = airMoveDeceleration;
+
+            if(currentJumpCount == 0)
+            {
+                coyoteTimeStart = Time.timeSinceLevelLoad;
+                canCoyoteJump = true;
+            }
+        }
+        else
+        {
+            speedLimit = groundSpeedMax;
+            speedLimitDeceleration = groundMoveDeceleration;
+            currentJumpCount = 0;
+        }
+
+        if (jumpQueued && isGrounded)
+            Jump();
     }
 
-    public void HitStun()
-    {
-        //Complete after.
-    }
+    //public void HitStun()
+    //{
+
+    //}
 }
