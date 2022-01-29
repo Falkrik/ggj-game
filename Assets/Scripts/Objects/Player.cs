@@ -1,18 +1,105 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class Player : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float jumpForce;
+    [SerializeField] private float hitStunTime;
+    [SerializeField] private float hitStunMovementFalloff;
+    [SerializeField] private float pushForce;
+    [SerializeField] private float pushDuration;
+    [SerializeField] private float pushCooldown;
+
+    private int playerNumber;
+    private int maxJumpCount = 2;
+    private int currentJumpCount = 0;
+    private bool isHitStun = false;
+    protected ControlScheme controls;
+    protected GameObject characterPrefab;
+    protected Character playerCharacter;
+    protected Vector2 moveDir;
+
+    public Vector2 MoveDirection { get => moveDir; }
+    public int PlayerNumber { get => playerNumber; }
+
+    public void SpawnCharacter()
     {
-        
+        playerCharacter = Instantiate(characterPrefab, this.transform).GetComponent<Character>();
+        moveDir = Vector2.zero;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        GetInput();
+    }
+
+    private void GetInput()
+    {
+        if(controls == ControlScheme.WASD)
+            ListenWASDInput();
+
+        if (controls == ControlScheme.Arrows)
+            ListenARROWInput();
+    }
+
+    private void ListenWASDInput()
+    {
+        if (Input.GetKeyDown(KeyCode.W))
+            Jump();
+        if (Input.GetKeyDown(KeyCode.A))
+            moveDir += Vector2.left;
+        if (Input.GetKeyDown(KeyCode.D))
+            moveDir += Vector2.right;
+        //if (Input.GetKeyDown(KeyCode.S))
+        //    return;
+
+        if (Input.GetKeyUp(KeyCode.W))
+            Jump();
+        if (Input.GetKeyUp(KeyCode.A))
+            moveDir -= Vector2.left;
+        if (Input.GetKeyUp(KeyCode.D))
+            moveDir -= Vector2.right;
+        //if (Input.GetKeyUp(KeyCode.S))
+        //    return;
+
+        playerCharacter.MoveCharacter(moveDir);
+    }
+
+    private void ListenARROWInput()
+    {
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+            Jump();
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+            moveDir += Vector2.left;
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+            moveDir += Vector2.right;
+        //if (Input.GetKeyDown(KeyCode.DownArrow))
+        //    moveDir += Vector2.down;
+
+
+        if (Input.GetKeyUp(KeyCode.UpArrow))
+            Jump();
+        if (Input.GetKeyUp(KeyCode.LeftArrow))
+            moveDir -= Vector2.left;
+        if (Input.GetKeyUp(KeyCode.RightArrow))
+            moveDir -= Vector2.right;
+        //if (Input.GetKeyUp(KeyCode.DownArrow))
+        //    moveDir -= Vector2.down;
+
+        playerCharacter.MoveCharacter(moveDir);
+    }
+
+    private void Jump()
+    {
+        if (currentJumpCount == maxJumpCount)
+            return;
+
+        currentJumpCount += 1;
+
+        playerCharacter.Jump(Vector2.up * jumpForce);
     }
 }
