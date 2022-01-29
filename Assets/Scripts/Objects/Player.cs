@@ -24,10 +24,10 @@ public class Player : MonoBehaviour
 
     private int playerNumber;
     private int maxJumpCount = 2;
-    private int currentJumpCount = 0;
+    [SerializeField] private int currentJumpCount = 0;
     private bool isHitStun = false;
     private Character playerCharacter;
-    private Vector2 moveDir;
+    [SerializeField] private Vector2 moveDir;
     private float speedLimit;
     private float speedLimitDeceleration;
 
@@ -73,9 +73,9 @@ public class Player : MonoBehaviour
         {
             if(!isHitStun)
                 GetInput();
-            
+
+            SpeedLimitCheck();
             TimerChecks();
-            SpeedLimitChecks();
         }
     }
 
@@ -95,12 +95,12 @@ public class Player : MonoBehaviour
             canCoyoteJump = false;
     }
 
-    private void SpeedLimitChecks()
+    private void SpeedLimitCheck()
     {
-        if (Mathf.Abs(playerCharacter.CharacterRigidBody.velocity.x) <= speedLimit)
+        if (Mathf.Abs(playerCharacter.CharacterRigidBody.velocity.magnitude) <= speedLimit)
             return;
 
-        playerCharacter.CharacterRigidBody.velocity -= playerCharacter.CharacterRigidBody.velocity * speedLimitDeceleration;
+        playerCharacter.CharacterRigidBody.velocity = Vector2.ClampMagnitude(playerCharacter.CharacterRigidBody.velocity, speedLimit);
     }
 
     private void GetInput()
@@ -123,8 +123,6 @@ public class Player : MonoBehaviour
         //if (Input.GetKeyDown(KeyCode.S))
         //    return;
 
-        if (Input.GetKeyUp(KeyCode.W))
-            Jump();
         if (Input.GetKeyUp(KeyCode.A))
             moveDir -= Vector2.left;
         if (Input.GetKeyUp(KeyCode.D))
@@ -147,8 +145,6 @@ public class Player : MonoBehaviour
         //    moveDir += Vector2.down;
 
 
-        if (Input.GetKeyUp(KeyCode.UpArrow))
-            Jump();
         if (Input.GetKeyUp(KeyCode.LeftArrow))
             moveDir -= Vector2.left;
         if (Input.GetKeyUp(KeyCode.RightArrow))
@@ -178,28 +174,43 @@ public class Player : MonoBehaviour
             return;
         }
 
-        if (!isGrounded && !canQueueJump && currentJumpCount < maxJumpCount)
-        {            
-            if(canCoyoteJump)
-            {
-                currentJumpCount += 1;
-                playerCharacter.Jump(Vector2.up * jumpForce);
-                canCoyoteJump = false;
+        //if (!isGrounded && !canQueueJump && currentJumpCount < maxJumpCount)
+        //{            
+        //    if(canCoyoteJump)
+        //    {
+        //        currentJumpCount += 1;
+        //        playerCharacter.Jump(Vector2.up * jumpForce);
+        //        canCoyoteJump = false;
                 
-                return;
-            }
+        //        return;
+        //    }
 
-            playerCharacter.Jump(Vector2.up * jumpForce);
-            currentJumpCount = maxJumpCount;
-        }
+        //    playerCharacter.Jump(Vector2.up * jumpForce);
+        //    currentJumpCount = maxJumpCount;
+        //}
     }
 
     private void MovePlayer()
     {
-        if (isGrounded)
-            playerCharacter.MoveCharacter(moveDir * groundMoveAcceleration);
+        if(moveDir != Vector2.zero && playerCharacter.CharacterRigidBody.velocity.magnitude < speedLimit)
+        {
+            if (isGrounded)
+                playerCharacter.MoveCharacter(moveDir * groundMoveAcceleration);
+            else
+                playerCharacter.MoveCharacter(moveDir * airMoveAcceleration);
+            return;
+        }
+        if (moveDir != Vector2.zero && playerCharacter.CharacterRigidBody.velocity.magnitude >= speedLimit)
+        {
+            return;
+        }
         else
-            playerCharacter.MoveCharacter(moveDir * airMoveAcceleration);
+        {
+            if (isGrounded)
+                playerCharacter.MoveCharacter(-playerCharacter.CharacterRigidBody.velocity * groundMoveDeceleration);
+            if (!isGrounded)
+                playerCharacter.MoveCharacter(-playerCharacter.CharacterRigidBody.velocity * airMoveDeceleration);
+        }
     }
 
     private void UsePush()
@@ -218,6 +229,7 @@ public class Player : MonoBehaviour
     public void ChangePlayerGrounding(bool newGrounding)
     {
         isGrounded = newGrounding;
+        Debug.Log("Current Grounding: " + isGrounded);
 
         if (!isGrounded)
         {
@@ -230,10 +242,12 @@ public class Player : MonoBehaviour
                 canCoyoteJump = true;
             }
         }
-        else
+        
+        if(isGrounded)
         {
             speedLimit = groundSpeedMax;
             speedLimitDeceleration = groundMoveDeceleration;
+
             currentJumpCount = 0;
         }
 
