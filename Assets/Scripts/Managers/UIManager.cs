@@ -9,8 +9,9 @@ public class UIManager : MonoBehaviour
 
     [Header("UI References")]
     [SerializeField] private Text timerText;
-    // Stock
-    // Duality count
+    [SerializeField] private Text[] stockText;
+    [SerializeField] private GameObject[] dualityIconP1;
+    [SerializeField] private GameObject[] dualityIconP2;
     [Space]
     [SerializeField] private Animator suddenDeathAnim;
     [Space]
@@ -35,6 +36,9 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
+        UpdateStockCount(1, 10);
+        UpdateDuality(1, 2);
+        UpdateDuality(2, 0);
         //WinPopup(1);
         //PauseScreen();
     }
@@ -56,12 +60,36 @@ public class UIManager : MonoBehaviour
 
     public void UpdateStockCount(int playerNumber, int stockCount)
     {
-
+        stockText[playerNumber - 1].text = "x" + stockCount;
     }
 
     public void UpdateDuality(int playerNumber, int dualityCount)
     {
+        int count = 0;
+        if (playerNumber == 1)
+        {
+            foreach(GameObject icon in dualityIconP1)
+            {
+                if (count >= dualityCount)
+                    icon.SetActive(false);
+                else
+                    icon.SetActive(true);
 
+                count++;
+            }
+        }
+        else if (playerNumber == 2)
+        {
+            foreach (GameObject icon in dualityIconP2)
+            {
+                if (count >= dualityCount)
+                    icon.SetActive(false);
+                else
+                    icon.SetActive(true);
+
+                count++;
+            }
+        }
     }
 
     public void UpdateTimer(float currentTime)
