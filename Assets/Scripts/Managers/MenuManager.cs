@@ -48,7 +48,7 @@ public class MenuManager : MonoBehaviour
             ChangePlayerColorCW(1);
 
 
-        if (Input.GetKeyUp(KeyCode.Space))
+        if (Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.Return))
         {
             TriggerButton();
         }    

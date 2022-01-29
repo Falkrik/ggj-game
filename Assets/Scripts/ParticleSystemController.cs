@@ -16,12 +16,31 @@ public class ParticleSystemController : MonoBehaviour
     public GameObject hitgroundParticlePrefab;
     [Space]
     public GameObject phaseplatformParticlePrefab;
+    [Space]
+    public GameObject pushParticlePrefab;
 
 
     public static ParticleSystemController particleContoller;
 
     private void Awake() { particleContoller = this; }
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Alpha1))
+            particleContoller.SpawnParticleSystem(ParticleType.DEATH, new Vector3(0, -5, 0));
+        if (Input.GetKeyUp(KeyCode.Alpha2))
+            particleContoller.SpawnParticleSystem(ParticleType.DUALITY, new Vector3(0, 0, 0));
+        if (Input.GetKeyUp(KeyCode.Alpha3))
+            particleContoller.SpawnParticleSystem(ParticleType.JUMP, new Vector3(0, 0, 0));
+        if (Input.GetKeyUp(KeyCode.Alpha4))
+            particleContoller.SpawnParticleSystem(ParticleType.DOUBLEJUMP, new Vector3(0, 0, 0));
+        if (Input.GetKeyUp(KeyCode.Alpha5))
+            particleContoller.SpawnParticleSystem(ParticleType.HITGROUND, new Vector3(0, 0, 0));
+        if (Input.GetKeyUp(KeyCode.Alpha6))
+            particleContoller.SpawnParticleSystem(ParticleType.PHASEPLATFORM, new Vector3(0, 0, 0));
+        if (Input.GetKeyUp(KeyCode.Alpha7))
+            particleContoller.SpawnParticleSystem(ParticleType.PUSH, new Vector3(0, 0, 0));
 
+    }
 
     public void SpawnParticleSystem(ParticleType type, Vector3 position)
     {
@@ -53,6 +72,10 @@ public class ParticleSystemController : MonoBehaviour
                 particle = phaseplatformParticlePrefab;
                 break;
 
+            case ParticleType.PUSH:
+                particle = pushParticlePrefab;
+                break;
+
             default:
                 return;
         }
@@ -63,7 +86,7 @@ public class ParticleSystemController : MonoBehaviour
             return;
         }
 
-        Instantiate(particle, position, Quaternion.identity);
+        Destroy(Instantiate(particle, position, particle.transform.rotation), 2);
     }
 
 }
