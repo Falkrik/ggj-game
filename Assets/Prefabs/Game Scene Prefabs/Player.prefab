@@ -54,7 +54,8 @@ MonoBehaviour:
   airMoveSpeedMax: 15
   airMoveAcceleration: 25
   airMoveDeceleration: 0.1
-  jumpForce: 10
+  aerialJumpForce: 8
+  groundedJumpForce: 10
   fallMultiplier: 3
   coyoteTime: 0
   hitStunTime: 0
