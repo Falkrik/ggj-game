@@ -10,12 +10,14 @@ public class Character : MonoBehaviour
     private Player player;
     private Rigidbody2D rb;
     private Collider2D coll;
-    private bool isJumping = false;
+    private bool groundedJump = false;
+    private bool aerialJump = false;
 
     public Rigidbody2D CharacterRigidBody { get => rb; }
     public Collider2D CharacterCollider { get => coll; }
     public Player CharacterPlayer { get => player; set => player = value; }
-    public bool IsJumping { get => isJumping; set => isJumping = value; }
+    public bool GroundedJump { get => groundedJump; set => groundedJump = value; }
+    public bool AerialJump { get => AerialJump; set => aerialJump = value; }
 
     public void UsePush()
     {
@@ -42,14 +44,15 @@ public class Character : MonoBehaviour
         MoveCharacter();
         FallSpeed();
 
-        if(isJumping)
-            Jump(player.JumpForce);
+        if(aerialJump)
+            Jump(player.AerialJumpForce);
+
+        if (groundedJump)
+            Jump(player.GroundedJumpForce);
     }
 
     private void MoveCharacter()
     {
-        //Debug.Log("Velocity is: " + rb.velocity);
-
         if (player.SpeedLimit != 0)
         {
             if(rb.velocity.magnitude > player.SpeedLimit || rb.velocity.magnitude < -player.SpeedLimit)
@@ -71,12 +74,11 @@ public class Character : MonoBehaviour
 
     private void Jump(float jumpForce)
     {
-        //Vector2 jump = new Vector2(0, jumpForce);
-        //rb.AddForce(jump, ForceMode2D.Impulse);
-
         Vector2 jump = new Vector2(rb.velocity.x, jumpForce);
         rb.velocity = jump;
-        isJumping = false;
+
+        groundedJump = false;
+        aerialJump = false;
 
         //Add animation and particle effects here.
     }
