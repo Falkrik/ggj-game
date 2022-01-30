@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -36,6 +37,7 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     public void InitBattleManager()
     {
+        ClearPlayerList();
         maxMatchTime = GameManager.Instance.MaxMatchTime;
         currentTime = maxMatchTime;
         currentPlayerList = new List<Player>();
@@ -44,6 +46,16 @@ public class BattleManager : MonoBehaviour
 
         SpawnMap();
         SpawnAllPlayers();
+    }
+
+    private void ClearPlayerList()
+    {
+        foreach (Player playerObject in currentPlayerList)
+            Destroy(playerObject.gameObject);
+
+        playerDuality.Clear();
+        playerStocks.Clear();
+        currentPlayerList.Clear();
     }
 
     private void Update()
@@ -122,6 +134,13 @@ public class BattleManager : MonoBehaviour
         currentPlayerList[1].InitPlayer(playerSpawnPositions[1]);
         playerStocks.Add(GameManager.Instance.PlayerStockCount);
         playerDuality.Add(0);
+
+        UIManager.manager.UpdateDuality(1, playerDuality[0]);
+        UIManager.manager.UpdateDuality(2, playerDuality[1]);
+        UIManager.manager.UpdateStockCount(1, playerDuality[0]);
+        UIManager.manager.UpdateStockCount(2, playerDuality[1]);
+
+
     }
 
     private void TimerCountdown()
@@ -132,6 +151,7 @@ public class BattleManager : MonoBehaviour
         if (!matchPaused)
         {
             currentTime -= Time.deltaTime;
+            UIManager.manager.UpdateTimer(currentTime);
             return;
         }
 
@@ -166,11 +186,13 @@ public class BattleManager : MonoBehaviour
 
     private void EndMatch()
     {
+        winner = currentPlayerList[0];
+
         foreach(Player player in currentPlayerList)
-            if(playerStocks[player.PlayerNumber] != 0)
-            {
+            if(playerStocks[player.PlayerNumber] >= playerStocks[winner.PlayerNumber])
                 winner = player;
-                UIManager.manager.WinPopup(winner.PlayerNumber + 1);
-            }
+
+        UIManager.manager.WinPopup(winner.PlayerNumber + 1);
+
     }
 }
