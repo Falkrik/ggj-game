@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   battleManager: {fileID: 3412239300823856222}
-  playerCount: 2
+  playerCount: 1
   playerStockCount: 3
   maxMatchTime: 60
 --- !u!114 &3412239300823856222
