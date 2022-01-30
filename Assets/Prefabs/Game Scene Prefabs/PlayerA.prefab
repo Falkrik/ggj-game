@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4045971342838139718}
   - component: {fileID: 256980600754817673}
   m_Layer: 0
-  m_Name: Player
+  m_Name: PlayerA
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43,8 +43,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b46b7580b84a6a4468b22f7413ad5321, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveDir: {x: 0, y: 0}
   characterPrefab: {fileID: 1775803238137433946, guid: 98bb76e9485e2b64c95a8ba8d17b3db5,
+    type: 3}
+  pushAbilityPrefab: {fileID: 5535524269478357298, guid: 86fc0f71071bed14ea250f18363b3f73,
     type: 3}
   controls: 0
   spawnPosition: {x: 0, y: 0}
@@ -59,6 +60,6 @@ MonoBehaviour:
   fallMultiplier: 2
   coyoteTime: 0
   hitStunTime: 0
-  pushForce: 0
-  pushDuration: 0
+  pushForce: 70
+  pushDuration: 1
   pushCooldown: 0

@@ -45,7 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   battleManager: {fileID: 3412239300823856222}
-  playerCount: 1
   playerStockCount: 3
   maxMatchTime: 60
 --- !u!114 &3412239300823856222
@@ -60,9 +59,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aceb1bc3e6e444d47a783e77f9c9226d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapPrefab: {fileID: 3389702232238645503, guid: 704b34a1e942f3a45a96dd639c7b7bb3,
+  mapPrefabA: {fileID: 0}
+  mapPrefabB: {fileID: 0}
+  playerPrefabA: {fileID: 5429017740406470064, guid: 12d3ffa793a4bcb49ae8ad85a4f68fc1,
     type: 3}
-  playerPrefab: {fileID: 5429017740406470064, guid: 12d3ffa793a4bcb49ae8ad85a4f68fc1,
+  playerPrefabB: {fileID: 5429017740406470064, guid: 8c71a1a3bc35f304aaa3e4106506ef78,
     type: 3}
   playerList: []
   playerSpawnPositions:

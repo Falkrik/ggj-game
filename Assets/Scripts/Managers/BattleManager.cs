@@ -8,14 +8,13 @@ public class BattleManager : MonoBehaviour
 
     [SerializeField] private GameObject mapPrefabA;
     [SerializeField] private GameObject mapPrefabB;
-    [SerializeField] private GameObject playerPrefab;
-    [SerializeField] private List<GameObject> playerList;
+    [SerializeField] private GameObject playerPrefabA;
+    [SerializeField] private GameObject playerPrefabB;
     [SerializeField] private List<Vector2> playerSpawnPositions;
 
     private GameObject mapA;
     private GameObject mapB;
 
-    private int playerCount;
     private float maxMatchTime;
     private float currentTime;
     private bool matchStarted;
@@ -36,7 +35,6 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     public void InitBattleManager()
     {
-        playerCount = GameManager.Instance.PlayerCount;
         maxMatchTime = GameManager.Instance.MaxMatchTime;
         currentTime = maxMatchTime;
         currentPlayerList = new List<Player>();
@@ -96,13 +94,15 @@ public class BattleManager : MonoBehaviour
 
     private void SpawnPlayers()
     {
-        for(int i = 0; i < playerCount; i++)
-        {
-            GameObject newPlayer = Instantiate(playerPrefab, this.transform);
+        GameObject playerA = Instantiate(playerPrefabA, this.transform);
 
-            currentPlayerList.Add(newPlayer.GetComponent<Player>());
-            currentPlayerList[i].SpawnCharacter(playerSpawnPositions[i]);
-        }
+        currentPlayerList.Add(playerA.GetComponent<Player>());
+        currentPlayerList[0].InitPlayer(playerSpawnPositions[0]);
+
+        GameObject playerB = Instantiate(playerPrefabB, this.transform);
+
+        currentPlayerList.Add(playerB.GetComponent<Player>());
+        currentPlayerList[1].InitPlayer(playerSpawnPositions[1]);
     }
 
     private void TimerCountdown()
