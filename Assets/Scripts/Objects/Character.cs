@@ -65,8 +65,10 @@ public class Character : MonoBehaviour
 
     private void Jump(float jumpForce)
     {
-        Vector2 jump = new Vector2(rb.velocity.x, jumpForce);
+        Vector2 jump = new Vector2(0, jumpForce);
         rb.AddForce(jump, ForceMode2D.Impulse);
+
+        //Vector2 jump = new Vector2(rb.velocity.x, jumpForce);
         //rb.velocity = jump;
         isJumping = false;
 
