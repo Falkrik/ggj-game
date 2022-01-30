@@ -121,14 +121,14 @@ public class Player : MonoBehaviour
             Jump();
 
         if (Input.GetKeyDown(KeyCode.A))
-            moveDir = Vector2.left;
+            moveDir += Vector2.left;
         if (Input.GetKeyDown(KeyCode.D))
-            moveDir = Vector2.right;
+            moveDir += Vector2.right;
 
         if (Input.GetKeyUp(KeyCode.A))
-            moveDir = Vector2.zero;
+            moveDir -= Vector2.left;
         if (Input.GetKeyUp(KeyCode.D))
-            moveDir = Vector2.zero;
+            moveDir -= Vector2.right;
     }
 
     private void ListenARROWInput()
@@ -137,15 +137,15 @@ public class Player : MonoBehaviour
             Jump();
 
         if (Input.GetKeyDown(KeyCode.LeftArrow))
-            moveDir = Vector2.left;
+            moveDir += Vector2.left;
         if (Input.GetKeyDown(KeyCode.RightArrow))
-            moveDir = Vector2.right;
+            moveDir += Vector2.right;
 
 
         if (Input.GetKeyUp(KeyCode.LeftArrow))
-            moveDir = Vector2.zero;
+            moveDir -= Vector2.left;
         if (Input.GetKeyUp(KeyCode.RightArrow))
-            moveDir = Vector2.zero;
+            moveDir -= Vector2.right;
     }
 
     private void Jump()

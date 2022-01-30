@@ -49,12 +49,12 @@ MonoBehaviour:
   controls: 0
   spawnPosition: {x: 0, y: 0}
   groundSpeedMax: 5
-  groundMoveAcceleration: 10
+  groundMoveAcceleration: 100
   groundMoveDeceleration: 5
-  airMoveSpeedMax: 1
-  airMoveAcceleration: 10
+  airMoveSpeedMax: 8
+  airMoveAcceleration: 25
   airMoveDeceleration: 1
-  jumpForce: 7
+  jumpForce: 25
   coyoteTime: 0
   hitStunTime: 0
   pushForce: 0
