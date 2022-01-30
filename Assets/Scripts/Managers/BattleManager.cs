@@ -123,21 +123,27 @@ public class BattleManager : MonoBehaviour
     [ContextMenu("Swap Maps")]
     private void SwapMap()
     {
+        Debug.Log(mapPhase);
        if(mapPhase == MapPhase.A)
        {
-            mapA.SetActive(false);
-            mapB.SetActive(true);
+
+            mapA.gameObject.SetActive(false);
+            mapB.gameObject.SetActive(true);
 
             mapPhase = MapPhase.B;
+            return;
        }
 
         if (mapPhase == MapPhase.B)
         {
-            mapA.SetActive(true);
-            mapB.SetActive(false);
+            mapA.gameObject.SetActive(true);
+            mapB.gameObject.SetActive(false);
 
             mapPhase = MapPhase.A;
+            return;
         }
+        Debug.Log(mapPhase);
+
     }
 
     private void EndMatch()

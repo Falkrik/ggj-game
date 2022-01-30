@@ -24,9 +24,9 @@ public class Character : MonoBehaviour
         //Complete after.
     }
 
-    public void GetPushed(float pushForce)
+    public void GetPushed(float pushForce, Vector2 direction)
     {
-
+        rb.AddForce(direction * pushForce, ForceMode2D.Impulse);
     }
 
     public void UseDuality()
@@ -66,7 +66,7 @@ public class Character : MonoBehaviour
 
         //Add animation controls here.
         if ((player.MoveDirection == Vector2.zero && rb.velocity.x > 0) || (player.MoveDirection == Vector2.zero && rb.velocity.x < 0))
-            rb.AddForce(-rb.velocity * player.DecelerationSpeed);
+            rb.AddForce(-rb.velocity * player.DecelerationSpeed, ForceMode2D.Force);
         if (player.MoveDirection != Vector2.zero && Mathf.Abs(rb.velocity.x) < player.SpeedLimit && rb.velocity.y < player.SpeedLimit)
             rb.AddForce(player.MoveDirection * player.AccelerationSpeed, ForceMode2D.Force);
     }
