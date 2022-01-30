@@ -44,7 +44,7 @@ public class AudioManager : MonoBehaviour
     {
         if (musicFadeoutIndex != -1)
         {
-            musicList[musicFadeoutIndex].volume = Mathf.MoveTowards(musicList[musicFadeoutIndex].volume, 0, 0.1f * Time.deltaTime);
+            musicList[musicFadeoutIndex].volume = Mathf.MoveTowards(musicList[musicFadeoutIndex].volume, 0, 0.3f * Time.deltaTime);
 
             if (musicList[musicFadeoutIndex].volume == 0)
             {
@@ -55,7 +55,7 @@ public class AudioManager : MonoBehaviour
 
         if (musicFadeinIndex != -1)
         {
-            musicList[musicFadeinIndex].volume = Mathf.MoveTowards(musicList[musicFadeinIndex].volume, master * music, 0.1f * Time.deltaTime);
+            musicList[musicFadeinIndex].volume = Mathf.MoveTowards(musicList[musicFadeinIndex].volume, master * music, 0.3f * Time.deltaTime);
 
             if (musicList[musicFadeinIndex].volume == master * music)
             {
