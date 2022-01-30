@@ -9,6 +9,8 @@ public class UIManager : MonoBehaviour
     [Header("Setup")]
     public Sprite p1Icon;
     public Sprite p2Icon;
+    [Space]
+    public AudioClip battleMusic;
 
     [Header("UI References")]
     [SerializeField] private Text timerText;
@@ -48,6 +50,8 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         manager = this;
+        Debug.Log("Battle Music started through UIManager (no hate, scuffed setup)");
+        AudioManager.audioManager.PlayMusic(battleMusic);
 
         //UpdateStockCount(1, 10);
         //UpdateDuality(1, 2);
