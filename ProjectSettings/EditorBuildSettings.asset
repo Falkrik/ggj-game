@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Menu.unity
     guid: fb3f43e85ec18ef40a4a46e824fe49c3
   - enabled: 1
-    path: Assets/Scenes/Henrik.unity
-    guid: 1ede7be882bca1c4e8e6988d2b588d9d
+    path: Assets/Scenes/MainStage.unity
+    guid: a00131ad7f7b8524680967f26f429b40
   m_configObjects: {}

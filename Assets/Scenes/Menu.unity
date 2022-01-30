@@ -686,6 +686,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioPlayerPrefab: {fileID: 2899167015193505989, guid: eabb45aadeaec0a4c8423ca883be4019,
     type: 3}
+  fadeInSpeed: 0.25
+  fadeOutSpeed: 0.25
   master: 1
   music: 0.5
   sfx: 0.5
