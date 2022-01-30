@@ -17,7 +17,9 @@ public class Player : MonoBehaviour
     [SerializeField] private float airMoveSpeedMax;
     [SerializeField] private float airMoveAcceleration;
     [SerializeField] private float airMoveDeceleration;
-    [SerializeField] private float jumpForce;
+    [SerializeField] private float aerialJumpForce;
+    [SerializeField] private float groundedJumpForce;
+    [SerializeField] private float fallMultiplier;
     [SerializeField] private float coyoteTime;
     [SerializeField] private float hitStunTime;
     [SerializeField] private float pushForce;
@@ -51,7 +53,9 @@ public class Player : MonoBehaviour
     public float AirMoveSpeedMax { get => airMoveSpeedMax; }
     public float AirMoveAcceleration { get => airMoveAcceleration; }
     public float AirMoveDeceleration { get => AirMoveDeceleration; }
-    public float JumpForce { get => jumpForce; }
+    public float AerialJumpForce { get => aerialJumpForce; }
+    public float GroundedJumpForce { get => groundedJumpForce; }
+    public float FallMultiplier { get => fallMultiplier; }
     public float SpeedLimit { get => speedLimit; }
     public float AccelerationSpeed { get => speedAcceleration; }
     public float DecelerationSpeed { get => speedDeceleration; }
@@ -153,11 +157,15 @@ public class Player : MonoBehaviour
         if (currentJumpCount >= maxJumpCount && !canQueueJump)
             return;
 
+        speedLimit = airMoveSpeedMax;
+        speedDeceleration = airMoveDeceleration;
+        speedAcceleration = airMoveAcceleration;
+
         if (isGrounded)
         {
             currentJumpCount += 1;
 
-            playerCharacter.IsJumping = true;
+            playerCharacter.GroundedJump = true;
             return;
         }
 
@@ -175,12 +183,12 @@ public class Player : MonoBehaviour
                 currentJumpCount += 1;
                 canCoyoteJump = false;
 
-                playerCharacter.IsJumping = true;
+                playerCharacter.GroundedJump = true;
                 return;
             }
 
             currentJumpCount = maxJumpCount;
-            playerCharacter.IsJumping = true;
+            playerCharacter.AerialJump = true;
         }
     }
 
@@ -228,7 +236,6 @@ public class Player : MonoBehaviour
             jumpQueued = false;
             Jump();
         }
-
     }
 
     private void ResetJumpCount() => currentJumpCount = 0;
