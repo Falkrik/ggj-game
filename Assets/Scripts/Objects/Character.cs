@@ -40,6 +40,7 @@ public class Character : MonoBehaviour
     private void FixedUpdate()
     {
         MoveCharacter();
+        FallSpeed();
 
         if(isJumping)
             Jump(player.JumpForce);
@@ -47,8 +48,7 @@ public class Character : MonoBehaviour
 
     private void MoveCharacter()
     {
-        Debug.Log(rb.velocity);
-        Debug.Log(player.SpeedLimit);
+        //Debug.Log("Velocity is: " + rb.velocity);
 
         if (player.SpeedLimit != 0)
         {
@@ -57,17 +57,25 @@ public class Character : MonoBehaviour
         }
 
         //Add animation controls here.
-        if (player.MoveDirection == Vector2.zero || rb.velocity.x > player.SpeedLimit || rb.velocity.y > player.SpeedLimit)
+        if ((player.MoveDirection == Vector2.zero && rb.velocity.x > 0) || (player.MoveDirection == Vector2.zero && rb.velocity.x < 0))
             rb.AddForce(-rb.velocity * player.DecelerationSpeed);
-        if (player.MoveDirection != Vector2.zero && rb.velocity.x < player.SpeedLimit && rb.velocity.y < player.SpeedLimit)
+        if (player.MoveDirection != Vector2.zero && Mathf.Abs(rb.velocity.x) < player.SpeedLimit && rb.velocity.y < player.SpeedLimit)
             rb.AddForce(player.MoveDirection * player.AccelerationSpeed, ForceMode2D.Force);
+    }
+
+    private void FallSpeed()
+    {
+        if (rb.velocity.y < 0)
+            rb.velocity += Vector2.up * Physics2D.gravity.y * player.FallMultiplier * Time.deltaTime;
     }
 
     private void Jump(float jumpForce)
     {
+        //Vector2 jump = new Vector2(0, jumpForce);
+        //rb.AddForce(jump, ForceMode2D.Impulse);
+
         Vector2 jump = new Vector2(rb.velocity.x, jumpForce);
-        rb.AddForce(jump, ForceMode2D.Impulse);
-        //rb.velocity = jump;
+        rb.velocity = jump;
         isJumping = false;
 
         //Add animation and particle effects here.
