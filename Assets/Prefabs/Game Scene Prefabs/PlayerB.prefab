@@ -61,5 +61,5 @@ MonoBehaviour:
   coyoteTime: 0
   hitStunTime: 0
   pushForce: 70
-  pushDuration: 1
-  pushCooldown: 3
+  pushDuration: 0.5
+  pushCooldown: 1

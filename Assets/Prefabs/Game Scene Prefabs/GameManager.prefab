@@ -68,8 +68,8 @@ MonoBehaviour:
   playerPrefabB: {fileID: 5429017740406470064, guid: 8c71a1a3bc35f304aaa3e4106506ef78,
     type: 3}
   playerSpawnPositions:
-  - {x: 0, y: 4}
-  - {x: 4, y: -3}
+  - {x: -7, y: 4}
+  - {x: 7, y: 4}
 --- !u!114 &2072029966777933620
 MonoBehaviour:
   m_ObjectHideFlags: 0
