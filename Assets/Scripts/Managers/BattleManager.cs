@@ -140,10 +140,15 @@ public class BattleManager : MonoBehaviour
 
         UIManager.manager.UpdateDuality(1, playerDuality[0]);
         UIManager.manager.UpdateDuality(2, playerDuality[1]);
+<<<<<<< HEAD
         UIManager.manager.UpdateStockCount(1, playerStocks[0]);
         UIManager.manager.UpdateStockCount(2, playerStocks[1]);
 
 
+=======
+        UIManager.manager.UpdateStockCount(1, 4);
+        UIManager.manager.UpdateStockCount(2, 4);
+>>>>>>> origin/henrik
     }
 
     private void TimerCountdown()

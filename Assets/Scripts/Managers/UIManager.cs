@@ -259,7 +259,7 @@ public class UIManager : MonoBehaviour
                 case 0:
                     replayPopup.GetComponent<Animator>().SetBool("Visible", false);
                     winAnim.SetBool("Victory", false);
-                    // GameManager.RefreshBattleManager();
+                    GameManager.Instance.RefreshBattleManager();
                     gameOver = false;
                     break;
 
