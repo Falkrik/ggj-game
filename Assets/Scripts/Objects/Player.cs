@@ -39,15 +39,16 @@ public class Player : MonoBehaviour
     private bool jumpQueued = false;
     private bool canCoyoteJump = false;
     private bool isGrounded = false;
+    private bool canPush = true;
     private float coyoteTimeStart;
     private float hitStunTimeStart;
-    private float pushCooldownStart;
+    private float currentPushCooldownTime = 0f;
     private Vector2 moveDir;
     private Vector2 playerPosition;
 
 
     public Vector2 SpawnPosition { get => spawnPosition; set => spawnPosition = value; }
-    public int PlayerNumber { get => playerNumber; }
+    public int PlayerNumber { get => playerNumber; set => playerNumber = value; }
     public bool CanQueueJump { get => canQueueJump; set => canQueueJump = value; }
     public Vector2 MoveDirection { get => moveDir; }
     public float GroundSpeedMax { get => groundSpeedMax; }
@@ -62,6 +63,7 @@ public class Player : MonoBehaviour
     public float SpeedLimit { get => speedLimit; }
     public float AccelerationSpeed { get => speedAcceleration; }
     public float DecelerationSpeed { get => speedDeceleration; }
+    public float PushCoolDownTime { get => Mathf.Clamp01(pushCooldown / currentPushCooldownTime); }
 
     public void InitPlayer(Vector2 spawnPos)
     {
@@ -71,12 +73,9 @@ public class Player : MonoBehaviour
 
     public void Die()
     {
-        //Complete after.
-    }
-
-    public void HitStun()
-    {
-        //Complete after.
+        //Animations etc
+        GameManager.Instance.BattleManager.UpdatePlayerStock(PlayerNumber, -1);
+        GameManager.Instance.ParticleController.SpawnParticleSystem(ParticleType.DEATH, playerCharacter.transform.position);
     }
 
     private void Update()
@@ -113,9 +112,18 @@ public class Player : MonoBehaviour
     private void TimerChecks()
     {
         CheckCoyoteTime();
-        //CheckPushCooldown();
-        //CheckHitStunRecovery();
+        CheckPushCooldown();
         return;
+    }
+
+    private void CheckPushCooldown()
+    {
+        currentPushCooldownTime  += Time.deltaTime;
+
+        if (!canPush && currentPushCooldownTime >= pushCooldown)
+        {
+            canPush = true;
+        }
     }
 
     private void CheckCoyoteTime()
@@ -214,7 +222,12 @@ public class Player : MonoBehaviour
 
     private void UsePush()
     {
-        pushAbility.gameObject.SetActive(true);
+        if(canPush)
+        {
+            canPush = false;
+            pushAbility.gameObject.SetActive(true);
+            currentPushCooldownTime = 0f;
+        }
     }
 
     private void UseDuality()
