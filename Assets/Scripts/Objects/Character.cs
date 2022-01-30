@@ -24,6 +24,11 @@ public class Character : MonoBehaviour
         //Complete after.
     }
 
+    public void GetPushed(float pushForce)
+    {
+
+    }
+
     public void UseDuality()
     {
         //Complete after.
@@ -68,7 +73,7 @@ public class Character : MonoBehaviour
 
     private void FallSpeed()
     {
-        if (rb.velocity.y < 0)
+        if (rb.velocity.y < 0 && Mathf.Abs(rb.velocity.y) < player.SpeedLimit)
             rb.velocity += Vector2.up * Physics2D.gravity.y * player.FallMultiplier * Time.deltaTime;
     }
 
