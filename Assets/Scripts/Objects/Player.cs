@@ -48,7 +48,7 @@ public class Player : MonoBehaviour
 
 
     public Vector2 SpawnPosition { get => spawnPosition; set => spawnPosition = value; }
-    public int PlayerNumber { get => playerNumber; }
+    public int PlayerNumber { get => playerNumber; set => playerNumber = value; }
     public bool CanQueueJump { get => canQueueJump; set => canQueueJump = value; }
     public Vector2 MoveDirection { get => moveDir; }
     public float GroundSpeedMax { get => groundSpeedMax; }
@@ -75,6 +75,12 @@ public class Player : MonoBehaviour
     {
         //Animations etc
         GameManager.Instance.BattleManager.UpdatePlayerStock(PlayerNumber, -1);
+        GameManager.Instance.ParticleController.SpawnParticleSystem(ParticleType.DEATH, playerCharacter.transform.position);
+    }
+
+    public void GainDuality()
+    {
+        GameManager.Instance.BattleManager.UpdateDualityCount(PlayerNumber, +1);
     }
 
     private void Update()
@@ -93,6 +99,7 @@ public class Player : MonoBehaviour
         pushAbility = Instantiate(pushAbilityPrefab, playerCharacter.CharacterTransform);
         pushAbility.GetComponent<PushAbility>().PushForce = pushForce;
         pushAbility.GetComponent<PushAbility>().PushDuration = pushDuration;
+        pushAbility.GetComponent<PushAbility>().AbilityPlayer = this;
         pushAbility.gameObject.SetActive(false);
     }
 
@@ -122,9 +129,6 @@ public class Player : MonoBehaviour
         if (!canPush && currentPushCooldownTime >= pushCooldown)
         {
             canPush = true;
-            Debug.Log("Can push.");
-            Debug.Log("CurrentPushCooldownTime: " + currentPushCooldownTime);
-            Debug.Log("PushCooldown: " + pushCooldown);
         }
     }
 
@@ -151,6 +155,8 @@ public class Player : MonoBehaviour
             Jump();
         if (Input.GetKeyDown(KeyCode.F))
             UsePush();
+        if (Input.GetKeyDown(KeyCode.G))
+            UseDuality();
 
         if (Input.GetKeyDown(KeyCode.A))
             moveDir += Vector2.left;
@@ -169,6 +175,8 @@ public class Player : MonoBehaviour
             Jump();
         if (Input.GetKeyDown(KeyCode.RightShift))
             UsePush();
+        if (Input.GetKeyDown(KeyCode.Semicolon))
+            UseDuality();
 
         if (Input.GetKeyDown(KeyCode.LeftArrow))
             moveDir += Vector2.left;
@@ -234,7 +242,7 @@ public class Player : MonoBehaviour
 
     private void UseDuality()
     {
-        //Complete after.
+        GameManager.Instance.BattleManager.UpdateDualityCount(PlayerNumber, -1);
     }
 
     //Changes grounding status. If the player is not grounded, we set the player's movement stats 

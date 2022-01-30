@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private Animator optionsPopup;
     [SerializeField] private Animator menuPopup;
     [SerializeField] private Animator creditsPopup;
+    [Space]
+    public AudioClip menuMusic;
 
 
     [Header("Tools")]
@@ -24,6 +27,8 @@ public class MenuManager : MonoBehaviour
     {
         SelectButton(0);
         menuPopup.SetBool("Visible", true);
+
+        AudioManager.audioManager.PlayMusic(menuMusic);
     }
 
     
@@ -70,8 +75,7 @@ public class MenuManager : MonoBehaviour
 
     public void StartGame()
     {
-        Debug.Log("MenuManager :: StartGame");
-
+        SceneManager.LoadScene("MainStage");
     }
 
     public void OpenSettings()
@@ -80,6 +84,7 @@ public class MenuManager : MonoBehaviour
 
         optionsParent.SetActive(inOptions);
         optionsPopup.SetBool("Visible", inOptions);
+        optionsParent.GetComponent<OptionsManager>().ResetIndex();
     }
 
 

@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class PushAbility : MonoBehaviour
 {
+    private Player player;
     private CircleCollider2D coll;
     private float pushForce;
     private float pushDuration;
     private float currentDuration;
     public float PushForce { set => pushForce = value; }
     public float PushDuration { set => pushDuration = value; }
+    public Player AbilityPlayer { get => player; set => player = value; }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

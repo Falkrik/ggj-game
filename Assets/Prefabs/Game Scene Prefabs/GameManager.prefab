@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6565520430614586441}
   - component: {fileID: 2939423494190385501}
   - component: {fileID: 3412239300823856222}
+  - component: {fileID: 2072029966777933620}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -45,7 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   battleManager: {fileID: 3412239300823856222}
-  playerStockCount: 3
+  particleSystemController: {fileID: 0}
+  playerStockCount: 4
   maxMatchTime: 60
 --- !u!114 &3412239300823856222
 MonoBehaviour:
@@ -65,7 +67,29 @@ MonoBehaviour:
     type: 3}
   playerPrefabB: {fileID: 5429017740406470064, guid: 8c71a1a3bc35f304aaa3e4106506ef78,
     type: 3}
-  playerList: []
   playerSpawnPositions:
   - {x: 0, y: 4}
   - {x: 4, y: -3}
+--- !u!114 &2072029966777933620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1958903084106864676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32559188e18d61c419b0032d94c3f4d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deathParticlePrefab: {fileID: 7738985601127815908, guid: cbc52eec82820624bb48286641b62e84,
+    type: 3}
+  dualityParticlePrefab: {fileID: 0}
+  jumpParticlePrefab: {fileID: 2883262326902837896, guid: 4b9422ba08f77fa4884360b57d43b697,
+    type: 3}
+  doublejumpParticlePrefab: {fileID: 2883262326902837896, guid: 4b9422ba08f77fa4884360b57d43b697,
+    type: 3}
+  hitgroundParticlePrefab: {fileID: 3668475888011858474, guid: 6de5aa232cdbbd24fb318136c4f1d427,
+    type: 3}
+  phaseplatformParticlePrefab: {fileID: 0}
+  pushParticlePrefab: {fileID: 0}

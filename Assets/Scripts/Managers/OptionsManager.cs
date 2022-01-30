@@ -87,4 +87,10 @@ public class OptionsManager : MonoBehaviour
                 break;
         }
     }
+
+    public void ResetIndex()
+    {
+        rowIndex = 0;
+        ChangeRow(0);
+    }
 }
