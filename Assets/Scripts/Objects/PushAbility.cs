@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PushAbility : MonoBehaviour
 {
+    private CircleCollider2D coll;
     private float pushForce;
     private float pushDuration;
     private float currentDuration;
@@ -23,6 +24,7 @@ public class PushAbility : MonoBehaviour
             enemy.PushForce = pushForce;
             enemy.PushDirection = direction;
             enemy.IsPushed = true;
+            coll.enabled = false;
         }
     }
 
@@ -47,5 +49,11 @@ public class PushAbility : MonoBehaviour
     private void OnEnable()
     {
         currentDuration = pushDuration;
+        coll.enabled = true;
+    }
+
+    private void Awake()
+    {
+        coll = GetComponent<CircleCollider2D>();
     }
 }
