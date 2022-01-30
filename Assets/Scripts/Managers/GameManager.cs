@@ -6,6 +6,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private BattleManager battleManager;
+    [SerializeField] private ParticleSystemController particleSystemController;
 
     [SerializeField] private int playerStockCount;
     [SerializeField] private float maxMatchTime;
@@ -13,6 +14,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     
     public BattleManager BattleManager { get => battleManager; }
+    public ParticleSystemController ParticleController { get => particleSystemController; }
     public int PlayerStockCount { get => playerStockCount; }
     public float MaxMatchTime { get => maxMatchTime; }
 
@@ -32,7 +34,9 @@ public class GameManager : MonoBehaviour
     private void InitGameManager()
     {
         if (battleManager == null)
-            throw new NotImplementedException("BattleManager object was not added to the GameManager.");
+            battleManager = GetComponent<BattleManager>();
+        if (particleSystemController == null)
+            particleSystemController = GetComponent<ParticleSystemController>();
     }
 
     public void RefreshBattleManager()
