@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b46b7580b84a6a4468b22f7413ad5321, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterPrefab: {fileID: 1775803238137433946, guid: 98bb76e9485e2b64c95a8ba8d17b3db5,
+  characterPrefab: {fileID: 1775803238137433946, guid: cfa4ada929496f9468075847aceec7ff,
     type: 3}
   pushAbilityPrefab: {fileID: 5535524269478357298, guid: cfed84a49f5a16741bd94fd75adcdb2a,
     type: 3}
@@ -53,11 +53,11 @@ MonoBehaviour:
   groundMoveAcceleration: 100
   groundMoveDeceleration: 10
   airMoveSpeedMax: 10
-  airMoveAcceleration: 10
-  airMoveDeceleration: 0.1
+  airMoveAcceleration: 25
+  airMoveDeceleration: 1
   aerialJumpForce: 8
-  groundedJumpForce: 50
-  fallMultiplier: 3
+  groundedJumpForce: 10
+  fallMultiplier: 2
   coyoteTime: 0
   hitStunTime: 0
   pushForce: 70
