@@ -48,7 +48,7 @@ public class Player : MonoBehaviour
 
 
     public Vector2 SpawnPosition { get => spawnPosition; set => spawnPosition = value; }
-    public int PlayerNumber { get => playerNumber; }
+    public int PlayerNumber { get => playerNumber; set => playerNumber = value; }
     public bool CanQueueJump { get => canQueueJump; set => canQueueJump = value; }
     public Vector2 MoveDirection { get => moveDir; }
     public float GroundSpeedMax { get => groundSpeedMax; }
@@ -75,6 +75,7 @@ public class Player : MonoBehaviour
     {
         //Animations etc
         GameManager.Instance.BattleManager.UpdatePlayerStock(PlayerNumber, -1);
+        GameManager.Instance.ParticleController.SpawnParticleSystem(ParticleType.DEATH, playerCharacter.transform.position);
     }
 
     private void Update()
@@ -122,9 +123,6 @@ public class Player : MonoBehaviour
         if (!canPush && currentPushCooldownTime >= pushCooldown)
         {
             canPush = true;
-            Debug.Log("Can push.");
-            Debug.Log("CurrentPushCooldownTime: " + currentPushCooldownTime);
-            Debug.Log("PushCooldown: " + pushCooldown);
         }
     }
 

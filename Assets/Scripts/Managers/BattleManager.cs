@@ -14,6 +14,7 @@ public class BattleManager : MonoBehaviour
 
     private GameObject mapA;
     private GameObject mapB;
+    private Player winner;
 
     private float maxMatchTime;
     private float currentTime;
@@ -38,9 +39,10 @@ public class BattleManager : MonoBehaviour
         maxMatchTime = GameManager.Instance.MaxMatchTime;
         currentTime = maxMatchTime;
         currentPlayerList = new List<Player>();
+        playerStocks = new List<int>();
 
         SpawnMap();
-        SpawnPlayers();
+        SpawnAllPlayers();
     }
 
     private void Update()
@@ -59,8 +61,12 @@ public class BattleManager : MonoBehaviour
         playerStocks[playerNumber] += stockChange;
 
         if (playerStocks[playerNumber] < 1)
+        {
             EndMatch();
-        return;
+            return;
+        }       
+
+        currentPlayerList[playerNumber].InitPlayer(playerSpawnPositions[playerNumber]);
     }
 
     /// <summary>
@@ -92,17 +98,21 @@ public class BattleManager : MonoBehaviour
         mapPhase = MapPhase.A;
     }
 
-    private void SpawnPlayers()
+    private void SpawnAllPlayers()
     {
-        GameObject playerA = Instantiate(playerPrefabA, this.transform);
+        GameObject player0 = Instantiate(playerPrefabA, this.transform);
 
-        currentPlayerList.Add(playerA.GetComponent<Player>());
+        currentPlayerList.Add(player0.GetComponent<Player>());
+        player0.GetComponent<Player>().PlayerNumber = 0;
         currentPlayerList[0].InitPlayer(playerSpawnPositions[0]);
+        playerStocks.Add(GameManager.Instance.PlayerStockCount);
 
-        GameObject playerB = Instantiate(playerPrefabB, this.transform);
+        GameObject player1 = Instantiate(playerPrefabB, this.transform);
 
-        currentPlayerList.Add(playerB.GetComponent<Player>());
+        currentPlayerList.Add(player1.GetComponent<Player>());
+        player1.GetComponent<Player>().PlayerNumber = 1;
         currentPlayerList[1].InitPlayer(playerSpawnPositions[1]);
+        playerStocks.Add(GameManager.Instance.PlayerStockCount);
     }
 
     private void TimerCountdown()
@@ -120,7 +130,6 @@ public class BattleManager : MonoBehaviour
             EndMatch();
     }
 
-    [ContextMenu("Swap Maps")]
     private void SwapMap()
     {
         Debug.Log(mapPhase);
@@ -148,6 +157,12 @@ public class BattleManager : MonoBehaviour
 
     private void EndMatch()
     {
-        //Here we need to build the player win/loss condition and add the UI representation.
+        foreach(Player player in currentPlayerList)
+            if(playerStocks[player.PlayerNumber] != 0)
+            {
+                winner = player;
+            }
+
+        Debug.Log("The winner is player " + winner.PlayerNumber + "!");
     }
 }
