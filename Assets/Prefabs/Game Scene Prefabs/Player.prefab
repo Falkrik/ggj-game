@@ -50,11 +50,13 @@ MonoBehaviour:
   spawnPosition: {x: 0, y: 0}
   groundSpeedMax: 5
   groundMoveAcceleration: 100
-  groundMoveDeceleration: 5
-  airMoveSpeedMax: 8
+  groundMoveDeceleration: 10
+  airMoveSpeedMax: 15
   airMoveAcceleration: 25
-  airMoveDeceleration: 1
-  jumpForce: 25
+  airMoveDeceleration: 0.1
+  aerialJumpForce: 8
+  groundedJumpForce: 10
+  fallMultiplier: 3
   coyoteTime: 0
   hitStunTime: 0
   pushForce: 0
