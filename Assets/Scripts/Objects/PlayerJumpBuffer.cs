@@ -15,10 +15,7 @@ public class PlayerJumpBuffer : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.gameObject.GetComponent<PlatformGround>() != null)
-        {
-            Debug.Log("Can queue jump.");
             player.CanQueueJump = true;
-        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)

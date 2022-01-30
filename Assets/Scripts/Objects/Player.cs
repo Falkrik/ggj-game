@@ -6,9 +6,8 @@ using UnityEngine;
 [Serializable]
 public class Player : MonoBehaviour
 {
-    [SerializeField] private Vector2 moveDir;
-
     [SerializeField] private GameObject characterPrefab;
+    [SerializeField] private GameObject pushAbilityPrefab;
     [SerializeField] private ControlScheme controls;
     [SerializeField] private Vector2 spawnPosition;
     [SerializeField] private float groundSpeedMax;
@@ -31,6 +30,7 @@ public class Player : MonoBehaviour
     private int currentJumpCount = 0;
     private bool isHitStun = false;
     private Character playerCharacter;
+    private GameObject pushAbility;
     private float speedLimit;
     private float speedAcceleration;
     private float speedDeceleration;
@@ -39,9 +39,13 @@ public class Player : MonoBehaviour
     private bool jumpQueued = false;
     private bool canCoyoteJump = false;
     private bool isGrounded = false;
+    private bool canPush = true;
     private float coyoteTimeStart;
     private float hitStunTimeStart;
-    private float pushCooldownStart;
+    private float currentPushCooldownTime = 0f;
+    private Vector2 moveDir;
+    private Vector2 playerPosition;
+
 
     public Vector2 SpawnPosition { get => spawnPosition; set => spawnPosition = value; }
     public int PlayerNumber { get => playerNumber; }
@@ -59,28 +63,18 @@ public class Player : MonoBehaviour
     public float SpeedLimit { get => speedLimit; }
     public float AccelerationSpeed { get => speedAcceleration; }
     public float DecelerationSpeed { get => speedDeceleration; }
+    public float PushCoolDownTime { get => Mathf.Clamp01(pushCooldown / currentPushCooldownTime); }
 
-    [ContextMenu("Spawn")]
-    public void SpawnCharacter(Vector2 spawnPos)
+    public void InitPlayer(Vector2 spawnPos)
     {
-        SpawnPosition = spawnPos;
-        transform.position = SpawnPosition;
-
-        playerCharacter = Instantiate(characterPrefab, this.transform).GetComponent<Character>();
-        playerCharacter.CharacterPlayer = this;
-
-        ResetJumpCount();
-        moveDir = Vector2.zero;
+        SpawnCharacter(spawnPos);
+        InitPush(pushForce);
     }
 
     public void Die()
     {
-        //Complete after.
-    }
-
-    public void HitStun()
-    {
-        //Complete after.
+        //Animations etc
+        GameManager.Instance.BattleManager.UpdatePlayerStock(PlayerNumber, -1);
     }
 
     private void Update()
@@ -94,12 +88,44 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void InitPush(float pushForce)
+    {
+        pushAbility = Instantiate(pushAbilityPrefab, playerCharacter.CharacterTransform);
+        pushAbility.GetComponent<PushAbility>().PushForce = pushForce;
+        pushAbility.GetComponent<PushAbility>().PushDuration = pushDuration;
+        pushAbility.gameObject.SetActive(false);
+    }
+
+    private void SpawnCharacter(Vector2 spawnPos)
+    {
+        SpawnPosition = spawnPos;
+        transform.position = SpawnPosition;
+
+        playerCharacter = Instantiate(characterPrefab, this.transform).GetComponent<Character>();
+        playerCharacter.CharacterPlayer = this;
+
+        ResetJumpCount();
+        moveDir = Vector2.zero;
+    }
+
     private void TimerChecks()
     {
         CheckCoyoteTime();
-        //CheckPushCooldown();
-        //CheckHitStunRecovery();
+        CheckPushCooldown();
         return;
+    }
+
+    private void CheckPushCooldown()
+    {
+        currentPushCooldownTime  += Time.deltaTime;
+
+        if (!canPush && currentPushCooldownTime >= pushCooldown)
+        {
+            canPush = true;
+            Debug.Log("Can push.");
+            Debug.Log("CurrentPushCooldownTime: " + currentPushCooldownTime);
+            Debug.Log("PushCooldown: " + pushCooldown);
+        }
     }
 
     private void CheckCoyoteTime()
@@ -123,6 +149,8 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.W))
             Jump();
+        if (Input.GetKeyDown(KeyCode.F))
+            UsePush();
 
         if (Input.GetKeyDown(KeyCode.A))
             moveDir += Vector2.left;
@@ -139,6 +167,8 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.UpArrow))
             Jump();
+        if (Input.GetKeyDown(KeyCode.RightShift))
+            UsePush();
 
         if (Input.GetKeyDown(KeyCode.LeftArrow))
             moveDir += Vector2.left;
@@ -156,6 +186,10 @@ public class Player : MonoBehaviour
     {
         if (currentJumpCount >= maxJumpCount && !canQueueJump)
             return;
+
+        speedLimit = airMoveSpeedMax;
+        speedDeceleration = airMoveDeceleration;
+        speedAcceleration = airMoveAcceleration;
 
         if (isGrounded)
         {
@@ -190,7 +224,12 @@ public class Player : MonoBehaviour
 
     private void UsePush()
     {
-        //Complete after.
+        if(canPush)
+        {
+            canPush = false;
+            pushAbility.gameObject.SetActive(true);
+            currentPushCooldownTime = 0f;
+        }
     }
 
     private void UseDuality()
@@ -232,7 +271,6 @@ public class Player : MonoBehaviour
             jumpQueued = false;
             Jump();
         }
-
     }
 
     private void ResetJumpCount() => currentJumpCount = 0;

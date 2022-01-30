@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    [Header("Setup")]
+    public Sprite p1Icon;
+    public Sprite p2Icon;
 
     [Header("UI References")]
     [SerializeField] private Text timerText;
@@ -16,6 +19,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Animator suddenDeathAnim;
     [Space]
     [SerializeField] private Text winnerText;
+    [SerializeField] private Text loserText;
+    [SerializeField] private Image winnerIcon;
+    [SerializeField] private Image loserIcon;
     [SerializeField] private Animator winAnim;
     [SerializeField] private GameObject replayPopup;
     [SerializeField] private Image replayButtonHighlight;
@@ -23,6 +29,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject pauseParent;
     [SerializeField] private GameObject pausePopup;
     [SerializeField] private Image pauseButtonHighlight;
+    [Space]
+    [SerializeField] private GameObject optionsParent;
+    [SerializeField] private Animator optionsPopup;
 
 
     [Header("Tools")]
@@ -32,19 +41,30 @@ public class UIManager : MonoBehaviour
     private int replaySelectedIndex = 0;
     private bool gamePaused = false;
     private bool gameOver = false;
+    private bool inOptions = false;
 
+    public static UIManager manager;
 
     private void Start()
     {
-        UpdateStockCount(1, 10);
-        UpdateDuality(1, 2);
-        UpdateDuality(2, 0);
-        //WinPopup(1);
+        manager = this;
+
+        //UpdateStockCount(1, 10);
+        //UpdateDuality(1, 2);
+        //UpdateDuality(2, 0);
+        WinPopup(1);
         //PauseScreen();
     }
 
     private void Update()
     {
+        if (inOptions)
+        {
+            if (optionsParent.activeSelf == false)
+                inOptions = false;
+            return;
+        }
+
         if (!gamePaused && !gameOver)
             return;
 
@@ -138,8 +158,24 @@ public class UIManager : MonoBehaviour
     public void WinPopup(int playerNumber)
     {
         gameOver = true;
-        winnerText.text = "Player " + playerNumber + " won!";
-        winAnim.Play("SuddenDeathPopup");
+        winnerText.text = "Player " + playerNumber;
+        if (playerNumber == 1)
+            loserText.text = "Player 2";
+        else
+            loserText.text = "Player 1";
+
+        if(playerNumber == 1)
+        {
+            winnerIcon.sprite = p1Icon;
+            loserIcon.sprite = p2Icon;
+        }
+        else
+        {
+            winnerIcon.sprite = p2Icon;
+            loserIcon.sprite = p1Icon;
+        }
+
+        winAnim.SetBool("Victory", true);
 
         replaySelectedIndex = 0;
         replayButtonHighlight.rectTransform.anchoredPosition = new Vector3(-140, -125, 0);
@@ -167,6 +203,17 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void ToggleOptions()
+    {
+        if (!gamePaused)
+            return;
+
+        inOptions = !inOptions;
+
+        optionsParent.SetActive(inOptions);
+        optionsPopup.SetBool("Visible", inOptions);
+    }
+
     private void SelectButton(int dir)
     {
         if(gamePaused)
@@ -192,7 +239,7 @@ public class UIManager : MonoBehaviour
                     break;
 
                 case 1:
-                    //
+                    ToggleOptions();
                     break;
 
                 case 2:
@@ -206,6 +253,7 @@ public class UIManager : MonoBehaviour
             {
                 case 0:
                     replayPopup.GetComponent<Animator>().SetBool("Visible", false);
+                    winAnim.SetBool("Victory", false);
                     // GameManager.RefreshBattleManager();
                     gameOver = false;
                     break;
@@ -219,7 +267,7 @@ public class UIManager : MonoBehaviour
 
     private IEnumerator WinPopupCooldown()
     {
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(5f);
         replayPopup.GetComponent<Animator>().SetBool("Visible", true);
     }
 

@@ -46,3 +46,16 @@ The following packages were added:
 The following packages were updated:
   com.unity.2d.animation from version 3.2.2 to 3.2.3
   com.unity.2d.spriteshape from version 3.0.11 to 3.0.12
+
+=== Sun Jan 30 11:38:09 2022
+
+Packages were changed.
+Update Mode: resetToDefaultDependencies
+
+The following packages were removed:
+  com.unity.2d.animation@3.2.3
+  com.unity.2d.pixel-perfect@2.0.4
+  com.unity.2d.psdimporter@2.1.4
+  com.unity.2d.sprite@1.0.0
+  com.unity.2d.spriteshape@3.0.12
+  com.unity.2d.tilemap@1.0.0

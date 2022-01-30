@@ -5,7 +5,7 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
     [Header("Audio Prefab")]
-    public GameObject audioPlayer;
+    public GameObject audioPlayerPrefab;
 
     [Header("Lists")]
     private readonly List<AudioSource> musicList = new List<AudioSource>();
@@ -15,24 +15,28 @@ public class AudioManager : MonoBehaviour
     private int musicFadeoutIndex = -1;
     private int musicFadeinIndex = -1;
 
+    [Header("Saved Settings")]
+    [HideInInspector] public float master = 1;
+    [HideInInspector] public float music = 0.5f;
+    [HideInInspector] public float sfx = 0.5f;
 
     public static AudioManager audioManager;
     
-    void Start()
+    void Awake()
     {
         audioManager = this;
         DontDestroyOnLoad(this.gameObject);
 
         for(int i = 0; i < 20; i++)
-            sfxList.Add(Instantiate(audioPlayer, new Vector2(0, 0), Quaternion.identity, this.transform).GetComponent<AudioSource>());
+            sfxList.Add(Instantiate(audioPlayerPrefab, new Vector2(0, 0), Quaternion.identity, this.transform).GetComponent<AudioSource>());
 
         for(int i = 0; i < 2; i++)
         {
-            musicList.Add(Instantiate(audioPlayer, new Vector2(0, 0), Quaternion.identity, this.transform).GetComponent<AudioSource>());
+            musicList.Add(Instantiate(audioPlayerPrefab, new Vector2(0, 0), Quaternion.identity, this.transform).GetComponent<AudioSource>());
             musicList[i].loop = true;
         }
 
-        UpdateVolume(1, 0.5f, 0.5f);
+        UpdateAllVolume();
     }
 
     
@@ -73,7 +77,7 @@ public class AudioManager : MonoBehaviour
             }
         }
 
-        sfxList.Add(Instantiate(audioPlayer, new Vector2(0, 0), Quaternion.identity, this.transform).GetComponent<AudioSource>());
+        sfxList.Add(Instantiate(audioPlayerPrefab, new Vector2(0, 0), Quaternion.identity, this.transform).GetComponent<AudioSource>());
         sfxList[sfxList.Count - 1].clip = sound;
         sfxList[sfxList.Count - 1].Play();
     }
@@ -96,7 +100,7 @@ public class AudioManager : MonoBehaviour
         musicFadeinIndex = musicPlayingIndex;
     }
 
-    public void UpdateVolume(float master, float music, float sfx)
+    private void UpdateAllVolume()
     {
         foreach (AudioSource source in sfxList)
         {
@@ -107,5 +111,25 @@ public class AudioManager : MonoBehaviour
         {
             source.volume = music * master;
         }
+    }
+
+    public void UpdateVolume(SliderType type, float volume)
+    {
+        switch (type)
+        {
+            case SliderType.MASTER:
+                master = volume;
+                break;
+
+            case SliderType.MUSIC:
+                music = volume;
+                break;
+
+            case SliderType.SFX:
+                sfx = volume;
+                break;
+        }
+
+        UpdateAllVolume();
     }
 }
