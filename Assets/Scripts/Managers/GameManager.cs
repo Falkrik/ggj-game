@@ -7,14 +7,12 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private BattleManager battleManager;
 
-    [SerializeField] private int playerCount;
     [SerializeField] private int playerStockCount;
     [SerializeField] private float maxMatchTime;
 
     public static GameManager Instance;
     
     public BattleManager BattleManager { get => battleManager; }
-    public int PlayerCount { get => playerCount; }
     public int PlayerStockCount { get => playerStockCount; }
     public float MaxMatchTime { get => maxMatchTime; }
 
@@ -23,6 +21,7 @@ public class GameManager : MonoBehaviour
         if (Instance != null)
             Destroy(this);
         Instance = this;
+
     }
     private void Start()
     {
