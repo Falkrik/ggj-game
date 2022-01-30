@@ -52,11 +52,11 @@ MonoBehaviour:
   groundMoveAcceleration: 100
   groundMoveDeceleration: 10
   airMoveSpeedMax: 10
-  airMoveAcceleration: 20
+  airMoveAcceleration: 25
   airMoveDeceleration: 1
   aerialJumpForce: 8
   groundedJumpForce: 10
-  fallMultiplier: 3
+  fallMultiplier: 2
   coyoteTime: 0
   hitStunTime: 0
   pushForce: 0
