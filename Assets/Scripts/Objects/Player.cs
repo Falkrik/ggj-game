@@ -6,9 +6,8 @@ using UnityEngine;
 [Serializable]
 public class Player : MonoBehaviour
 {
-    [SerializeField] private Vector2 moveDir;
-
     [SerializeField] private GameObject characterPrefab;
+    [SerializeField] private GameObject pushAbility;
     [SerializeField] private ControlScheme controls;
     [SerializeField] private Vector2 spawnPosition;
     [SerializeField] private float groundSpeedMax;
@@ -42,6 +41,8 @@ public class Player : MonoBehaviour
     private float coyoteTimeStart;
     private float hitStunTimeStart;
     private float pushCooldownStart;
+    private Vector2 moveDir;
+
 
     public Vector2 SpawnPosition { get => spawnPosition; set => spawnPosition = value; }
     public int PlayerNumber { get => playerNumber; }
@@ -123,6 +124,8 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.W))
             Jump();
+        if (Input.GetKeyDown(KeyCode.F))
+            UsePush();
 
         if (Input.GetKeyDown(KeyCode.A))
             moveDir += Vector2.left;
@@ -194,7 +197,7 @@ public class Player : MonoBehaviour
 
     private void UsePush()
     {
-        //Complete after.
+        
     }
 
     private void UseDuality()
