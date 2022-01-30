@@ -12,11 +12,18 @@ public class MenuManager : MonoBehaviour
     public Color[] playerColors;
 
 
+    [Header("References")]
+    [SerializeField] private GameObject optionsParent;
+    [SerializeField] private Animator optionsPopup;
+
+
     [Header("Tools")]
     public GameObject[] buttonList;
     public Image[] playerIcons;
     private int[] playerColorIndex = { 0, 0 };
     private int selectedIndex = 0;
+
+    private bool inOptions = false;
 
 
     void Start()
@@ -27,6 +34,13 @@ public class MenuManager : MonoBehaviour
     
     void Update()
     {
+        if (inOptions)
+        {
+            if (optionsParent.activeSelf == false)
+                inOptions = false;
+            return;
+        }
+
         // Temporary input
         if (Input.GetKeyUp(KeyCode.W))
         {
@@ -72,7 +86,10 @@ public class MenuManager : MonoBehaviour
 
     public void OpenSettings()
     {
-        Debug.Log("MenuManager :: OpenSettings");
+        inOptions = !inOptions;
+
+        optionsParent.SetActive(inOptions);
+        optionsPopup.SetBool("Visible", inOptions);
     }
 
 
