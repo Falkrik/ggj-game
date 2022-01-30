@@ -380,6 +380,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3412239300823856222, guid: ae0ac409f880251499a5b19379f3032d,
         type: 3}
+      propertyPath: playerList.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3412239300823856222, guid: ae0ac409f880251499a5b19379f3032d,
+        type: 3}
       propertyPath: mapPrefabA
       value: 
       objectReference: {fileID: 3389702232238645503, guid: 704b34a1e942f3a45a96dd639c7b7bb3,

@@ -12,21 +12,23 @@ public class Character : MonoBehaviour
     private Collider2D coll;
     private bool groundedJump = false;
     private bool aerialJump = false;
+    private float pushForce;
+    private Vector2 pushDirection;
+    private bool isPushed = false;
 
     public Rigidbody2D CharacterRigidBody { get => rb; }
     public Collider2D CharacterCollider { get => coll; }
     public Player CharacterPlayer { get => player; set => player = value; }
     public bool GroundedJump { get => groundedJump; set => groundedJump = value; }
     public bool AerialJump { get => AerialJump; set => aerialJump = value; }
+    public Transform CharacterTransform { get => transform; }
+    public float PushForce { set => pushForce = value; }
+    public Vector2 PushDirection { set => pushDirection = value; }
+    public bool IsPushed { set => isPushed = value; }
 
     public void UsePush()
     {
         //Complete after.
-    }
-
-    public void GetPushed(float pushForce, Vector2 direction)
-    {
-        rb.AddForce(direction * pushForce, ForceMode2D.Impulse);
     }
 
     public void UseDuality()
@@ -54,6 +56,9 @@ public class Character : MonoBehaviour
 
         if (groundedJump)
             Jump(player.GroundedJumpForce);
+
+        if (isPushed)
+            GetPushed();
     }
 
     private void MoveCharacter()
@@ -86,6 +91,13 @@ public class Character : MonoBehaviour
         aerialJump = false;
 
         //Add animation and particle effects here.
+    }
+
+    private void GetPushed()
+    {
+        Debug.Log("Pushed.");
+        rb.velocity += (pushDirection * pushForce);
+        isPushed = false;
     }
 
     #region Unity Methods
