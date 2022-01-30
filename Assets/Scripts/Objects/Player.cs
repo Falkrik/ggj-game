@@ -78,6 +78,11 @@ public class Player : MonoBehaviour
         GameManager.Instance.ParticleController.SpawnParticleSystem(ParticleType.DEATH, playerCharacter.transform.position);
     }
 
+    public void GainDuality()
+    {
+        GameManager.Instance.BattleManager.UpdateDualityCount(PlayerNumber, +1);
+    }
+
     private void Update()
     {
         if (playerCharacter != null)
@@ -94,6 +99,7 @@ public class Player : MonoBehaviour
         pushAbility = Instantiate(pushAbilityPrefab, playerCharacter.CharacterTransform);
         pushAbility.GetComponent<PushAbility>().PushForce = pushForce;
         pushAbility.GetComponent<PushAbility>().PushDuration = pushDuration;
+        pushAbility.GetComponent<PushAbility>().AbilityPlayer = this;
         pushAbility.gameObject.SetActive(false);
     }
 
@@ -149,6 +155,8 @@ public class Player : MonoBehaviour
             Jump();
         if (Input.GetKeyDown(KeyCode.F))
             UsePush();
+        if (Input.GetKeyDown(KeyCode.G))
+            UseDuality();
 
         if (Input.GetKeyDown(KeyCode.A))
             moveDir += Vector2.left;
@@ -167,6 +175,8 @@ public class Player : MonoBehaviour
             Jump();
         if (Input.GetKeyDown(KeyCode.RightShift))
             UsePush();
+        if (Input.GetKeyDown(KeyCode.Semicolon))
+            UseDuality();
 
         if (Input.GetKeyDown(KeyCode.LeftArrow))
             moveDir += Vector2.left;
@@ -232,7 +242,7 @@ public class Player : MonoBehaviour
 
     private void UseDuality()
     {
-        //Complete after.
+        GameManager.Instance.BattleManager.UpdateDualityCount(PlayerNumber, -1);
     }
 
     //Changes grounding status. If the player is not grounded, we set the player's movement stats 

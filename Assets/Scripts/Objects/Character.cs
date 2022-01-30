@@ -26,16 +26,6 @@ public class Character : MonoBehaviour
     public Vector2 PushDirection { set => pushDirection = value; }
     public bool IsPushed { set => isPushed = value; }
 
-    public void UsePush()
-    {
-        //Complete after.
-    }
-
-    public void UseDuality()
-    {
-        //Complete after.
-    }
-
     public void Die()
     {
         player.Die();
