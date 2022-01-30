@@ -38,7 +38,8 @@ public class Character : MonoBehaviour
 
     public void Die()
     {
-        //Complete after.
+        player.Die();
+        Destroy(this.gameObject);
     }
 
     public void ChangePlayerGrounding(bool isGrounded)
