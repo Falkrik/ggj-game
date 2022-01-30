@@ -46,7 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   battleManager: {fileID: 3412239300823856222}
-  playerStockCount: 3
+  particleSystemController: {fileID: 0}
+  playerStockCount: 4
   maxMatchTime: 60
 --- !u!114 &3412239300823856222
 MonoBehaviour:

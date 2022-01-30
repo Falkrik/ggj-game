@@ -686,6 +686,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioPlayerPrefab: {fileID: 2899167015193505989, guid: eabb45aadeaec0a4c8423ca883be4019,
     type: 3}
+  fadeInSpeed: 0.25
+  fadeOutSpeed: 0.25
   master: 1
   music: 0.5
   sfx: 0.5
@@ -1029,7 +1031,7 @@ MonoBehaviour:
   optionsPopup: {fileID: 409216422}
   menuPopup: {fileID: 2097763091}
   creditsPopup: {fileID: 130035614}
-  menuMusic: {fileID: 8300000, guid: 23f7cef6beb47c64e818c052bf4b7ee1, type: 3}
+  menuMusic: {fileID: 8300000, guid: f2fbfdce11882b045b38489d2778e552, type: 3}
   highlighter: {fileID: 1422375849}
 --- !u!4 &660306701
 Transform:
