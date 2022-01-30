@@ -55,11 +55,10 @@ public class AudioManager : MonoBehaviour
 
         if (musicFadeinIndex != -1)
         {
-            musicList[musicFadeinIndex].volume = Mathf.MoveTowards(musicList[musicFadeinIndex].volume, 0, 0.1f * Time.deltaTime);
+            musicList[musicFadeinIndex].volume = Mathf.MoveTowards(musicList[musicFadeinIndex].volume, master * music, 0.1f * Time.deltaTime);
 
-            if (musicList[musicFadeinIndex].volume == 0)
+            if (musicList[musicFadeinIndex].volume == master * music)
             {
-                musicList[musicFadeinIndex].Stop();
                 musicFadeinIndex = -1;
             }
         }

@@ -2586,6 +2586,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   p1Icon: {fileID: 21300000, guid: 067cb656e87dfa2489d5059fcf73d122, type: 3}
   p2Icon: {fileID: 21300000, guid: 6a72c4e1927c22043998c7a306fabbbf, type: 3}
+  battleMusic: {fileID: 8300000, guid: 659ea5cfbe072b84a9011453723ea01c, type: 3}
   timerText: {fileID: 298008718}
   stockText:
   - {fileID: 923830715}
