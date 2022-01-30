@@ -53,6 +53,9 @@ public class BattleManager : MonoBehaviour
         foreach (Player playerObject in currentPlayerList)
             Destroy(playerObject.gameObject);
 
+        if (playerDuality == null)
+            return;
+
         playerDuality.Clear();
         playerStocks.Clear();
         currentPlayerList.Clear();
