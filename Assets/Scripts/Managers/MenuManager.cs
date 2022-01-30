@@ -10,6 +10,8 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private Animator optionsPopup;
     [SerializeField] private Animator menuPopup;
     [SerializeField] private Animator creditsPopup;
+    [Space]
+    public AudioClip menuMusic;
 
 
     [Header("Tools")]
@@ -24,6 +26,8 @@ public class MenuManager : MonoBehaviour
     {
         SelectButton(0);
         menuPopup.SetBool("Visible", true);
+
+        AudioManager.audioManager.PlayMusic(menuMusic);
     }
 
     
@@ -80,6 +84,7 @@ public class MenuManager : MonoBehaviour
 
         optionsParent.SetActive(inOptions);
         optionsPopup.SetBool("Visible", inOptions);
+        optionsParent.GetComponent<OptionsManager>().ResetIndex();
     }
 
 

@@ -52,7 +52,7 @@ public class UIManager : MonoBehaviour
         //UpdateStockCount(1, 10);
         //UpdateDuality(1, 2);
         //UpdateDuality(2, 0);
-        WinPopup(1);
+        //WinPopup(1);
         //PauseScreen();
     }
 
@@ -212,6 +212,7 @@ public class UIManager : MonoBehaviour
 
         optionsParent.SetActive(inOptions);
         optionsPopup.SetBool("Visible", inOptions);
+        optionsParent.GetComponent<OptionsManager>().ResetIndex();
     }
 
     private void SelectButton(int dir)
