@@ -157,6 +157,10 @@ public class Player : MonoBehaviour
         if (currentJumpCount >= maxJumpCount && !canQueueJump)
             return;
 
+        speedLimit = airMoveSpeedMax;
+        speedDeceleration = airMoveDeceleration;
+        speedAcceleration = airMoveAcceleration;
+
         if (isGrounded)
         {
             currentJumpCount += 1;
@@ -232,7 +236,6 @@ public class Player : MonoBehaviour
             jumpQueued = false;
             Jump();
         }
-
     }
 
     private void ResetJumpCount() => currentJumpCount = 0;
