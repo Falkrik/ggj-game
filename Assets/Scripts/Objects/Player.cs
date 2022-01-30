@@ -18,6 +18,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float airMoveAcceleration;
     [SerializeField] private float airMoveDeceleration;
     [SerializeField] private float jumpForce;
+    [SerializeField] private float fallMultiplier;
     [SerializeField] private float coyoteTime;
     [SerializeField] private float hitStunTime;
     [SerializeField] private float pushForce;
@@ -52,6 +53,7 @@ public class Player : MonoBehaviour
     public float AirMoveAcceleration { get => airMoveAcceleration; }
     public float AirMoveDeceleration { get => AirMoveDeceleration; }
     public float JumpForce { get => jumpForce; }
+    public float FallMultiplier { get => fallMultiplier; }
     public float SpeedLimit { get => speedLimit; }
     public float AccelerationSpeed { get => speedAcceleration; }
     public float DecelerationSpeed { get => speedDeceleration; }
