@@ -75,7 +75,7 @@ public class MenuManager : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene("Henrik");
+        SceneManager.LoadScene("MainStage");
     }
 
     public void OpenSettings()
