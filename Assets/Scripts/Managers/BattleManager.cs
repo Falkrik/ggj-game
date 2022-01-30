@@ -53,6 +53,9 @@ public class BattleManager : MonoBehaviour
         foreach (Player playerObject in currentPlayerList)
             Destroy(playerObject.gameObject);
 
+        if (playerDuality == null)
+            return;
+
         playerDuality.Clear();
         playerStocks.Clear();
         currentPlayerList.Clear();
@@ -137,10 +140,8 @@ public class BattleManager : MonoBehaviour
 
         UIManager.manager.UpdateDuality(1, playerDuality[0]);
         UIManager.manager.UpdateDuality(2, playerDuality[1]);
-        UIManager.manager.UpdateStockCount(1, playerDuality[0]);
-        UIManager.manager.UpdateStockCount(2, playerDuality[1]);
-
-
+        UIManager.manager.UpdateStockCount(1, 4);
+        UIManager.manager.UpdateStockCount(2, 4);
     }
 
     private void TimerCountdown()
