@@ -40,6 +40,7 @@ public class BattleManager : MonoBehaviour
         currentTime = maxMatchTime;
         currentPlayerList = new List<Player>();
         playerStocks = new List<int>();
+        playerDuality = new List<int>();
 
         SpawnMap();
         SpawnAllPlayers();
@@ -77,9 +78,11 @@ public class BattleManager : MonoBehaviour
     public void UpdateDualityCount(int playerNumber, int dualityChange)
     {
         if (dualityChange < 1)
+        {
             SwapMap();
+            playerDuality[playerNumber] += dualityChange;
+        }
 
-        playerDuality[playerNumber] += dualityChange;
         return;
     }
 
@@ -106,6 +109,7 @@ public class BattleManager : MonoBehaviour
         player0.GetComponent<Player>().PlayerNumber = 0;
         currentPlayerList[0].InitPlayer(playerSpawnPositions[0]);
         playerStocks.Add(GameManager.Instance.PlayerStockCount);
+        playerDuality.Add(0);
 
         GameObject player1 = Instantiate(playerPrefabB, this.transform);
 
@@ -113,6 +117,7 @@ public class BattleManager : MonoBehaviour
         player1.GetComponent<Player>().PlayerNumber = 1;
         currentPlayerList[1].InitPlayer(playerSpawnPositions[1]);
         playerStocks.Add(GameManager.Instance.PlayerStockCount);
+        playerDuality.Add(0);
     }
 
     private void TimerCountdown()
