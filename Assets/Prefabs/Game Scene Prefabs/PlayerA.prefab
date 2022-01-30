@@ -53,13 +53,13 @@ MonoBehaviour:
   groundMoveAcceleration: 100
   groundMoveDeceleration: 10
   airMoveSpeedMax: 10
-  airMoveAcceleration: 10
-  airMoveDeceleration: 0.1
+  airMoveAcceleration: 25
+  airMoveDeceleration: 1
   aerialJumpForce: 8
-  groundedJumpForce: 50
-  fallMultiplier: 3
+  groundedJumpForce: 10
+  fallMultiplier: 2
   coyoteTime: 0
   hitStunTime: 0
   pushForce: 70
   pushDuration: 1
-  pushCooldown: 0
+  pushCooldown: 5
