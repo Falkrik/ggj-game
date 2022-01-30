@@ -137,8 +137,8 @@ public class BattleManager : MonoBehaviour
 
         UIManager.manager.UpdateDuality(1, playerDuality[0]);
         UIManager.manager.UpdateDuality(2, playerDuality[1]);
-        UIManager.manager.UpdateStockCount(1, playerDuality[0]);
-        UIManager.manager.UpdateStockCount(2, playerDuality[1]);
+        UIManager.manager.UpdateStockCount(1, playerStocks[0]);
+        UIManager.manager.UpdateStockCount(2, playerStocks[1]);
 
 
     }
