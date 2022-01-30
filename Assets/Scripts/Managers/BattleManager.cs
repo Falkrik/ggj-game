@@ -60,6 +60,7 @@ public class BattleManager : MonoBehaviour
     public void UpdatePlayerStock(int playerNumber, int stockChange)
     {
         playerStocks[playerNumber] += stockChange;
+        UIManager.manager.UpdateStockCount(playerNumber + 1, playerStocks[playerNumber]);
 
         if (playerStocks[playerNumber] < 1)
         {
@@ -77,12 +78,15 @@ public class BattleManager : MonoBehaviour
     /// <param name="dualityChange">The amount to increment the total Duality count by. 1 will increase, -1 will decrease. </param>
     public void UpdateDualityCount(int playerNumber, int dualityChange)
     {
-        if (dualityChange < 1)
-        {
-            SwapMap();
-            playerDuality[playerNumber] += dualityChange;
-        }
+        if (playerDuality[playerNumber] < 1 && dualityChange < 1)
+            return; 
 
+        if (dualityChange < 0)
+            SwapMap();
+
+        playerDuality[playerNumber] += dualityChange;
+
+        UIManager.manager.UpdateDuality(playerNumber + 1, playerDuality[playerNumber]);
         return;
     }
 
@@ -166,8 +170,7 @@ public class BattleManager : MonoBehaviour
             if(playerStocks[player.PlayerNumber] != 0)
             {
                 winner = player;
+                UIManager.manager.WinPopup(winner.PlayerNumber + 1);
             }
-
-        Debug.Log("The winner is player " + winner.PlayerNumber + "!");
     }
 }
