@@ -62,4 +62,4 @@ MonoBehaviour:
   hitStunTime: 0
   pushForce: 70
   pushDuration: 1
-  pushCooldown: 0
+  pushCooldown: 5
